@@ -1,5 +1,5 @@
 // Feczo service worker: installable app shell + push notifications
-const CACHE = 'feczo-shell-v2';
+const CACHE = 'feczo-shell-v3';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
