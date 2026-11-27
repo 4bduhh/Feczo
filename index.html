@@ -776,10 +776,10 @@
         }
         .ai-msg.user .ai-msg-bubble .mini-stat { background: rgba(255,255,255,0.2); color: #fff; }
 
-        .ai-typing { display: flex; gap: 4px; padding: 4px 2px; }
-        .ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: aiTypingBounce 1.2s infinite ease-in-out; }
-        .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
-        .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+        div.ai-typing { display: flex; gap: 4px; padding: 4px 2px; }
+        div.ai-typing > span:not(.ai-think-t) { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); animation: aiTypingBounce 1.2s infinite ease-in-out; }
+        div.ai-typing > span:nth-child(2) { animation-delay: 0.15s; }
+        div.ai-typing > span:nth-child(3) { animation-delay: 0.3s; }
         @keyframes aiTypingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-4px); opacity: 1; } }
 
         .ai-suggest-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 1.4rem 1.1rem; flex-shrink: 0; }
@@ -1314,8 +1314,64 @@
         .ai-suggest-chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:.8rem;-webkit-overflow-scrolling:touch}
         .ai-suggest-chips::-webkit-scrollbar{display:none}
         .ai-chip{flex-shrink:0}
-        .ai-msg-bubble .mini-stat{display:inline-block;white-space:normal;line-height:1.3;padding:3px 10px;margin:2px 3px 2px 0;max-width:100%}
-        .ai-msg-bubble{min-width:0}
+        .ai-msg-bubble .mini-stat{display:inline-block;white-space:normal;line-height:1.3;padding:3px 10px;margin:2px 3px 2px 0}
+        .ai-msg-bubble{min-width:min(100%,230px);width:fit-content;max-width:100%;box-sizing:border-box}
+        .ai-msg{min-width:0}
+        /* Lead-summary chip bug lock: chips must never shrink below their text, never break per letter */
+        #aiChatBody .ai-msg .ai-msg-bubble{display:block !important;width:auto !important;min-width:min(100%,240px) !important;max-width:100% !important}
+        #aiChatBody .ai-msg-bubble .mini-stat{display:inline-flex !important;align-items:center;gap:6px;flex:none !important;width:auto !important;min-width:max-content !important;max-width:none !important;white-space:nowrap !important;word-break:normal !important;overflow-wrap:normal !important;writing-mode:horizontal-tb !important;vertical-align:middle}
+        #aiChatBody .ai-msg-bubble .mini-stat i{flex:none;width:auto}
+        /* ===== AI live-typing reveal (layout-stable: text is pre-laid-out, letters switch on one by one) ===== */
+        .ai-msg.bot.rv-in .ai-msg-bubble{position:relative;animation:rvBubble .45s cubic-bezier(.2,.9,.3,1.1) both, rvGlow 2.4s ease-out both}
+        .ai-msg.bot.rv-in .ai-msg-bubble::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+            background:linear-gradient(110deg,transparent 30%,rgba(76,141,255,.25) 50%,rgba(25,211,255,.16) 58%,transparent 72%);
+            transform:translateX(-120%);animation:rvSweep 1.3s .1s ease-out forwards}
+        @keyframes rvBubble{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:none}}
+        @keyframes rvGlow{0%{box-shadow:0 0 0 0 rgba(30,107,255,0)}25%{box-shadow:0 0 0 1px rgba(76,141,255,.6),0 0 26px rgba(30,107,255,.4)}100%{box-shadow:0 2px 10px rgba(20,30,70,.04)}}
+        @keyframes rvSweep{to{transform:translateX(120%)}}
+        .rv-w{display:inline-block;white-space:nowrap}
+        .rv-c{opacity:0}
+        .rv-c.on{opacity:1;animation:rvHot .7s ease-out}
+        @keyframes rvHot{
+            0%{color:#e8fbff;text-shadow:0 0 6px #19D3FF,0 0 16px #19D3FF,0 0 28px rgba(30,107,255,.95)}
+            35%{color:#19D3FF;text-shadow:0 0 10px rgba(25,211,255,.9),0 0 20px rgba(30,107,255,.6)}
+            100%{text-shadow:0 0 0 rgba(25,211,255,0)}}
+        .rv-chip{opacity:0}
+        .rv-chip.on{opacity:1;animation:rvPop .55s cubic-bezier(.2,1.4,.4,1) both}
+        @keyframes rvPop{0%{opacity:0;transform:scale(.4)}60%{opacity:1;transform:scale(1.08);box-shadow:0 0 18px rgba(30,107,255,.75)}100%{opacity:1;transform:none;box-shadow:0 0 0 rgba(30,107,255,0)}}
+        /* twinkling sparkle "cursor": zero-width so it never shifts text, no box */
+        .rv-caret{display:inline-block;position:relative;width:0;height:1em;vertical-align:baseline;pointer-events:none;
+            filter:drop-shadow(0 0 4px rgba(25,211,255,.95)) drop-shadow(0 0 10px rgba(167,139,250,.75))}
+        .rv-caret::after,.rv-caret::before{content:"";position:absolute;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
+            background:linear-gradient(135deg,#ffffff 0%,#8fefff 35%,#a78bfa 70%,#ff7ad9 100%)}
+        .rv-caret::after{left:3px;top:-.12em;width:1.05em;height:1.05em;animation:rvStar 1.4s linear infinite}
+        .rv-caret::before{left:1.05em;top:-.5em;width:.5em;height:.5em;animation:rvTwinkle 1.4s ease-in-out infinite .35s}
+        @keyframes rvStar{0%{transform:rotate(0) scale(.85);filter:hue-rotate(0deg)}50%{transform:rotate(90deg) scale(1.15);filter:hue-rotate(60deg)}100%{transform:rotate(180deg) scale(.85);filter:hue-rotate(0deg)}}
+        @keyframes rvTwinkle{0%,100%{transform:scale(0) rotate(0);opacity:0}50%{transform:scale(1) rotate(90deg);opacity:1}}
+        /* finale: star blooms big, spins, bursts into sparkles, then vanishes */
+        .rv-caret.rv-end{filter:drop-shadow(0 0 6px rgba(25,211,255,1)) drop-shadow(0 0 16px rgba(167,139,250,.95)) drop-shadow(0 0 30px rgba(255,122,217,.6))}
+        .rv-caret.rv-end::after{animation:rvStarEnd 1s cubic-bezier(.25,.9,.3,1) forwards}
+        .rv-caret.rv-end::before{animation:rvTwinkleEnd 1s ease-out forwards}
+        @keyframes rvStarEnd{
+            0%{transform:rotate(0) scale(1);opacity:1;filter:hue-rotate(0) brightness(1)}
+            30%{transform:rotate(110deg) scale(3);opacity:1;filter:hue-rotate(50deg) brightness(1.5)}
+            55%{transform:rotate(200deg) scale(2.4);opacity:1;filter:hue-rotate(110deg) brightness(1.3)}
+            100%{transform:rotate(360deg) scale(0);opacity:0;filter:hue-rotate(180deg) brightness(1)}}
+        @keyframes rvTwinkleEnd{0%{transform:scale(1) rotate(0);opacity:1}40%{transform:scale(2.6) rotate(120deg);opacity:1}100%{transform:scale(0) rotate(240deg);opacity:0}}
+        .rv-spark{position:absolute;left:calc(3px + .52em);top:.38em;width:var(--s,5px);height:var(--s,5px);margin:calc(var(--s,5px) / -2) 0 0 calc(var(--s,5px) / -2);
+            clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);background:var(--c,#8fefff);opacity:0;
+            animation:rvBurst .85s cubic-bezier(.15,.8,.3,1) var(--dl,0ms) forwards}
+        @keyframes rvBurst{0%{opacity:1;transform:translate(0,0) scale(.6) rotate(0)}70%{opacity:1}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.5) rotate(180deg)}}
+        .ai-msg.bot.rv-done .ai-msg-bubble{animation:rvDone 1.1s ease-out}
+        @keyframes rvDone{0%{box-shadow:0 0 0 0 rgba(25,211,255,0)}30%{box-shadow:0 0 0 1px rgba(143,239,255,.55),0 0 26px rgba(167,139,250,.45)}100%{box-shadow:0 2px 10px rgba(20,30,70,.04)}}
+        div.ai-typing{align-items:center;gap:5px}
+        div.ai-typing > span:not(.ai-think-t){background:linear-gradient(135deg,#4C8DFF,#19D3FF)!important;box-shadow:0 0 8px rgba(25,211,255,.7)}
+        div.ai-typing > .ai-think-t{display:inline-block;width:auto;height:auto;margin-left:8px;font-size:.8rem;font-weight:600;letter-spacing:.2px;
+            background-color:transparent!important;background-image:linear-gradient(100deg,#7d8398 30%,#e8fbff 45%,#19D3FF 50%,#e8fbff 55%,#7d8398 70%)!important;
+            background-size:250% 100%!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;color:transparent!important;
+            animation:rvShimmer 1.8s linear infinite!important;border-radius:0;box-shadow:none}
+        @keyframes rvShimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+
         @media (max-width:700px){
             .fz-brief-stats{grid-template-columns:repeat(2,1fr)}
             #ai-analyst .page-header{display:none}
@@ -1325,11 +1381,104 @@
             .ai-chat-head{padding:.7rem .9rem}
             .ai-chat-body{padding:.8rem;gap:.7rem}
             .ai-msg{max-width:94%}.ai-msg.user{max-width:86%}
-            .ai-msg-bubble{padding:.65rem .8rem;font-size:.9rem;overflow-wrap:break-word;word-break:normal;min-width:0;overflow:hidden}
+            .ai-msg-bubble{padding:.65rem .8rem;font-size:.9rem;overflow-wrap:break-word;word-break:normal;min-width:min(100%,230px);overflow:hidden}
             .ai-suggest-chips{padding:0 .8rem .6rem}
             .ai-chat-input-row{padding:.6rem .8rem}
             .ai-chat-input-row input{font-size:16px;padding:11px 16px;min-width:0}
         }
+        /* ===== Reminder pop-ups (visible on every page) ===== */
+        #fz-pop{position:fixed;top:84px;right:18px;width:min(370px,calc(100vw - 24px));display:flex;flex-direction:column;gap:14px;z-index:1200;pointer-events:none}
+        .fz-pop-card{--pc:76,141,255;pointer-events:auto;position:relative;overflow:hidden;display:flex;gap:.85rem;padding:1rem 2.4rem 1.1rem .95rem;border-radius:20px;color:#fff;
+            background:linear-gradient(135deg,rgba(14,18,32,.97),rgba(24,28,48,.97));border:1px solid rgba(var(--pc),.6);
+            box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 30px rgba(var(--pc),.32);backdrop-filter:blur(14px);
+            animation:fzPopIn .8s cubic-bezier(.2,1.15,.3,1) both,fzPopGlow 2.6s ease-in-out .8s infinite}
+        .fz-pop-card.red{--pc:238,93,80}.fz-pop-card.amber{--pc:255,181,71}.fz-pop-card.blue{--pc:76,141,255}
+        .fz-pop-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.13) 50%,transparent 65%);transform:translateX(-120%);animation:fzPopShine 4.2s ease-in-out 1s infinite}
+        .fz-pop-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,rgba(var(--pc),1),rgba(var(--pc),.2))}
+        .fz-pop-card.out{animation:fzPopOut .4s cubic-bezier(.6,0,.9,.4) forwards}
+        .fz-pop-ico{flex:none;position:relative;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:1.2rem;color:rgb(var(--pc));background:rgba(var(--pc),.16);animation:fzPopWobble 3.2s ease-in-out 1.2s infinite}
+        .fz-pop-ico::after{content:"";position:absolute;inset:0;border-radius:15px;border:2px solid rgba(var(--pc),.7);animation:fzPopRing 2.2s ease-out infinite}
+        .fz-pop-body{min-width:0;flex:1}
+        .fz-pop-tag{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgb(var(--pc))}
+        .fz-pop-t{display:block;font-size:1rem;line-height:1.3;margin:.1rem 0 .1rem;overflow-wrap:anywhere}
+        .fz-pop-s{font-size:.8rem;color:rgba(255,255,255,.62);overflow-wrap:anywhere}
+        .fz-pop-cd{display:inline-block;margin-top:.35rem;font-family:'Sora',sans-serif;font-weight:800;font-size:1.15rem;font-variant-numeric:tabular-nums;color:rgb(var(--pc))}
+        .fz-pop-btns{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.65rem}
+        .fz-pop-btns button{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;border-radius:10px;padding:.4rem .8rem;font:inherit;font-size:.76rem;font-weight:700;cursor:pointer;transition:transform .15s,background .15s}
+        .fz-pop-btns button:hover{transform:translateY(-1px);background:rgba(255,255,255,.14)}
+        .fz-pop-btns button.go{border:0;background:linear-gradient(135deg,rgb(var(--pc)),rgba(var(--pc),.65));color:#fff;box-shadow:0 6px 16px rgba(var(--pc),.35)}
+        .fz-pop-x{position:absolute;top:.55rem;right:.55rem;z-index:2;width:28px;height:28px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;transition:transform .2s,background .2s}
+        .fz-pop-x:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
+        .fz-pop-line{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,rgb(var(--pc)),transparent);background-size:200% 100%;animation:fzPopLine 2.2s linear infinite}
+        .fz-pop-more{pointer-events:auto;align-self:flex-end;border:1px solid rgba(76,141,255,.5);background:rgba(14,18,32,.95);color:#8fefff;border-radius:99px;padding:.45rem 1rem;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;animation:fzPopIn .6s cubic-bezier(.2,1.15,.3,1) both}
+        @keyframes fzPopIn{0%{opacity:0;transform:translateX(130%) scale(.9) rotate(4deg)}60%{opacity:1;transform:translateX(-8px) scale(1.02) rotate(-1deg)}100%{opacity:1;transform:none}}
+        @keyframes fzPopInM{0%{opacity:0;transform:translateY(-140%) scale(.92)}60%{opacity:1;transform:translateY(6px) scale(1.02)}100%{opacity:1;transform:none}}
+        @keyframes fzPopOut{to{opacity:0;transform:translateX(120%) scale(.92)}}
+        @keyframes fzPopGlow{0%,100%{box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 22px rgba(var(--pc),.25)}50%{box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 42px rgba(var(--pc),.55)}}
+        @keyframes fzPopShine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+        @keyframes fzPopRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.55);opacity:0}}
+        @keyframes fzPopWobble{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}92%{transform:rotate(12deg)}95%{transform:rotate(-8deg)}98%{transform:rotate(5deg)}}
+        @keyframes fzPopLine{from{background-position:200% 0}to{background-position:-200% 0}}
+        @media (max-width:700px){#fz-pop{top:calc(env(safe-area-inset-top,0px) + 68px);right:12px;left:12px;width:auto}.fz-pop-card{animation:fzPopInM .8s cubic-bezier(.2,1.15,.3,1) both,fzPopGlow 2.6s ease-in-out .8s infinite}}
+        @media (prefers-reduced-motion:reduce){.fz-pop-card,.fz-pop-card *,.fz-pop-card::before{animation-duration:.01s !important;animation-iteration-count:1 !important}}
+        /* ===== Personal Assistant ===== */
+        #pa .pa-hero{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.2rem 1.4rem;margin-bottom:1rem;border-radius:20px;border:1px solid rgba(76,141,255,.3);
+            background:radial-gradient(circle at 12% 0%,rgba(30,107,255,.35),transparent 55%),radial-gradient(circle at 95% 100%,rgba(167,139,250,.28),transparent 55%),rgba(20,20,28,.7)}
+        .pa-hero-l{display:flex;gap:.9rem;align-items:center;min-width:0}
+        .pa-hero h2{margin:0;font-size:1.25rem}.pa-hero p{margin:.15rem 0 0;color:var(--text-muted);font-size:.85rem}
+        .pa-av{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.1rem;background:linear-gradient(135deg,#1E6BFF,#a78bfa,#ff7ad9);box-shadow:0 0 0 4px rgba(76,141,255,.18),0 0 24px rgba(167,139,250,.55);animation:paPulse 3s ease-in-out infinite}
+        @keyframes paPulse{50%{box-shadow:0 0 0 8px rgba(76,141,255,.08),0 0 34px rgba(255,122,217,.6)}}
+        .pa-clock{text-align:right;white-space:nowrap}.pa-clock b{display:block;font-size:1.5rem;font-family:'Sora',sans-serif}.pa-clock span{color:var(--text-muted);font-size:.78rem}
+        .pa-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(330px,1fr);gap:1rem;align-items:start}
+        .pa-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}
+        .pa-tabs{display:none;gap:.5rem;margin-bottom:.8rem}.pa-tabs button{flex:1;padding:.6rem;border-radius:12px;border:1px solid var(--border);background:transparent;color:inherit;font-weight:600;cursor:pointer}
+        .pa-tabs button.on{background:linear-gradient(135deg,#1E6BFF,#19D3FF);border:0;color:#fff}
+        .pa-next{position:relative;overflow:hidden;padding:1.3rem 1.4rem;border:1px solid rgba(76,141,255,.35);background:linear-gradient(135deg,rgba(30,107,255,.22),rgba(25,211,255,.08) 60%,rgba(167,139,250,.14))}
+        .pa-next::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(25,211,255,.35),transparent 70%)}
+        .pa-next small{color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;font-weight:700}
+        .pa-next h3{margin:.3rem 0 .2rem;font-size:1.25rem}.pa-next .pa-in{font-size:1.9rem;font-weight:800;font-family:'Sora',sans-serif;background:linear-gradient(90deg,#8fefff,#a78bfa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        .pa-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;position:relative;z-index:1}
+        .pa-btns button,.pa-add{padding:.45rem .9rem;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+        .pa-btns button.go,.pa-add{background:linear-gradient(135deg,#1E6BFF,#19D3FF);border:0;color:#fff}
+        .pa-cal{padding:1rem}.pa-cal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+        .pa-cal-h button{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:transparent;color:inherit;cursor:pointer}
+        .pa-cal-w,.pa-cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+        .pa-cal-w span{font-size:.68rem;color:var(--text-muted);font-weight:700;padding:.2rem 0}
+        .pa-c{position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;font-size:.82rem;cursor:pointer;border:1px solid transparent;transition:transform .15s,background .15s}
+        .pa-c:hover{background:rgba(76,141,255,.15);transform:translateY(-2px)}.pa-c.out{opacity:.3}
+        .pa-c.today{border-color:#19D3FF;box-shadow:0 0 14px rgba(25,211,255,.55);font-weight:800}
+        .pa-c.sel{background:linear-gradient(135deg,#1E6BFF,#a78bfa);color:#fff}
+        .pa-dots{display:flex;gap:2px;position:absolute;bottom:4px}.pa-dots i{width:5px;height:5px;border-radius:50%}
+        .pa-legend{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.7rem;font-size:.7rem;color:var(--text-muted)}.pa-legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+        .pa-day{padding:1rem}.pa-day-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+        .pa-ev{display:flex;gap:.7rem;padding:.6rem .7rem;border-radius:12px;border:1px solid var(--border);margin-bottom:.45rem;animation:fzIn .3s ease-out}
+        .pa-ev i{margin-top:3px;width:16px;text-align:center}.pa-ev b{display:block;font-size:.88rem}.pa-ev small{color:var(--text-muted);font-size:.75rem}.pa-ev.done b{text-decoration:line-through;opacity:.6}
+        .pa-ev .pa-t{margin-left:auto;font-size:.75rem;font-weight:700;color:#8fefff;white-space:nowrap}
+        .pa-empty{color:var(--text-muted);font-size:.85rem;padding:.6rem 0}
+        .pa-m{display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.88rem}
+        .pa-bar{height:8px;border-radius:9px;background:rgba(238,93,80,.35);overflow:hidden;margin:.6rem 0}.pa-bar i{display:block;height:100%;background:linear-gradient(90deg,#05CD99,#19D3FF)}
+        .pa-chat-col{position:sticky;top:0}.pa-chat-card.glass-card{height:calc(100vh - 150px);min-height:460px}
+        .pa-clock b{font-variant-numeric:tabular-nums;white-space:nowrap}
+        .pa-clock .pa-sec{font-size:.55em;font-weight:600;color:var(--text-muted);margin-left:1px}
+        .pa-clock .pa-ap{font-size:.55em;font-weight:700;text-transform:lowercase;color:var(--text-muted);margin-left:2px}
+        .pa-chat-col,.pa-plan-col{min-width:0}
+        .pa-chat-card.glass-card{max-width:100%;min-width:0}
+        .pa-chat-card .ai-chat-head>div{min-width:0}
+        .pa-chat-card .ai-online{flex-wrap:wrap;white-space:normal;text-align:center;line-height:1.35}
+        #paChatBody{min-width:0;overflow-x:hidden}
+        #paChatBody .ai-msg{min-width:0;max-width:92%}
+        #paChatBody .ai-msg.user{max-width:86%}
+        #paChatBody .ai-msg-bubble{display:block !important;width:auto !important;min-width:0 !important;max-width:100% !important;white-space:normal;overflow-wrap:anywhere;word-break:break-word;overflow:hidden}
+        #paChatBody .ai-msg-bubble .mini-stat{display:inline-flex !important;white-space:nowrap;min-width:0}
+        #paChatBody code{display:block;margin:2px 0;padding:3px 7px;border-radius:7px;background:rgba(255,255,255,.07);font-size:.78rem;overflow-wrap:anywhere;word-break:break-all;white-space:normal}
+        #paChatBody a{color:#8fefff;overflow-wrap:anywhere;word-break:break-all}
+        .pa-copy{display:inline-flex;align-items:center;gap:5px;margin:2px 6px 2px 0;padding:3px 10px;border-radius:99px;border:1px solid rgba(76,141,255,.45);background:rgba(76,141,255,.12);color:#8fefff;font:inherit;font-size:.74rem;font-weight:700;cursor:pointer;transition:background .15s,transform .15s}
+        .pa-copy:hover{background:rgba(76,141,255,.25);transform:translateY(-1px)}.pa-copy.ok{background:rgba(5,205,153,.2);border-color:rgba(5,205,153,.6);color:#6ff0c8}
+        .pa-note{padding:.45rem 0;border-bottom:1px solid var(--border)}.pa-note:last-child{border:0}
+        .pa-undo{margin-left:6px;padding:2px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:inherit;font-size:.75rem;cursor:pointer}
+        @media (max-width:1000px){.pa-grid{grid-template-columns:minmax(0,1fr)}.pa-tabs{display:flex}.pa-chat-col{display:none;position:static}#pa.pa-show-chat .pa-chat-col{display:block}#pa.pa-show-chat .pa-plan-col{display:none}
+            .pa-chat-card.glass-card{height:calc(var(--vvh,100dvh) - 230px)}.pa-two{grid-template-columns:1fr}.pa-clock b{font-size:1.15rem}}
+        @media (max-width:480px){#pa .pa-hero{padding:.9rem 1rem;gap:.6rem}.pa-av{width:40px;height:40px;font-size:1rem}.pa-hero h2{font-size:1.05rem}.pa-clock b{font-size:1.05rem}.pa-clock span{font-size:.7rem}.pa-chat-card .ai-chat-body{padding:.7rem}}
 </style>
 </head>
 <body>
@@ -1527,6 +1676,10 @@
                 <div class="nav-item" data-target="ai-analyst">
                     <span class="nav-icon"><i class="fa-solid fa-robot"></i></span><span>AI Analyst</span>
                     <span class="nav-badge" style="background:var(--accent-purple);">AI</span>
+                </div>
+                <div class="nav-item" data-target="pa">
+                    <span class="nav-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span><span>Personal Assistant</span>
+                    <span class="nav-badge" style="background:linear-gradient(135deg,#1E6BFF,#ff7ad9);">PA</span>
                 </div>
             </nav>
             </div>
@@ -2111,6 +2264,48 @@
                     </div>
                 </section>
 
+                <section id="pa" class="view-section">
+                    <div class="pa-hero">
+                        <div class="pa-hero-l"><div class="pa-av"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <div><h2 id="paGreet">Hello boss</h2><p id="paSub">Your personal assistant is getting ready…</p></div></div>
+                        <div class="pa-clock"><b id="paClock">--:--</b><span id="paDate"></span></div>
+                    </div>
+                    <div class="pa-tabs"><button class="on" data-t="plan"><i class="fa-solid fa-calendar-days"></i> Plan</button><button data-t="chat"><i class="fa-solid fa-comments"></i> Chat with PA</button></div>
+                    <div class="pa-grid">
+                        <div class="pa-plan-col">
+                            <div class="pa-next glass-card" id="paNext"></div>
+                            <div class="pa-two">
+                                <div class="glass-card pa-cal"><div class="pa-cal-h"><button id="paPrev"><i class="fa-solid fa-chevron-left"></i></button><b id="paMonth"></b><button id="paNextM"><i class="fa-solid fa-chevron-right"></i></button></div>
+                                    <div class="pa-cal-w"><span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span></div>
+                                    <div class="pa-cal-g" id="paCalGrid"></div>
+                                    <div class="pa-legend"><span><i style="background:#4C8DFF"></i>Meeting</span><span><i style="background:#FFB547"></i>Bill due</span><span><i style="background:#a78bfa"></i>Project</span></div></div>
+                                <div class="glass-card pa-day"><div class="pa-day-h"><b id="paDayTitle">Today</b><button class="pa-add" onclick="openAddModal('meetings')"><i class="fa-solid fa-plus"></i> Meeting</button></div><div id="paDayList"></div></div>
+                            </div>
+                            <div class="pa-two">
+                                <div class="glass-card"><div class="section-title">Money this month</div><div id="paMoney"></div></div>
+                                <div class="glass-card"><div class="section-title">Needs attention</div><div id="paAttn"></div></div>
+                            </div>
+                        </div>
+                        <div class="pa-chat-col">
+                            <div class="glass-card ai-chat-card pa-chat-card">
+                                <div class="ai-chat-head"><div><h4>Your PA</h4><span class="ai-online"><span class="ai-status-dot"></span> Online · knows your calendar &amp; money</span></div></div>
+                                <div class="ai-chat-body" id="paChatBody"></div>
+                                <div class="ai-suggest-chips" id="paChips">
+                                    <button class="ai-chip" data-q="today plan">Today's plan</button>
+                                    <button class="ai-chip" data-q="next meeting">Next meeting</button>
+                                    <button class="ai-chip" data-q="this month money">Money</button>
+                                    <button class="ai-chip" data-q="projects due">Projects</button>
+                                    <button class="ai-chip" data-q="project notes">Project notes</button>
+                                    <button class="ai-chip" data-q="what can you do">What can you do?</button>
+                                </div>
+                                <div class="ai-chat-input-row"><input type="text" id="paInput" placeholder='Try: "meeting with Ravi tomorrow 4pm"' autocomplete="off"><button class="btn-primary" id="paSend"><i class="fa-solid fa-paper-plane"></i></button></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
                 <!-- ============================================================
                      13. SETTINGS
                      ============================================================ -->
@@ -2276,6 +2471,7 @@
     </div>
 
     <div id="toast-stack"></div>
+    <div id="fz-pop" aria-live="polite"></div>
 
     <!-- ==========================================================================
          JAVASCRIPT LOGIC
@@ -2559,6 +2755,10 @@
             else { dot.style.background = 'var(--warning)'; dot.style.boxShadow = 'none'; txt.textContent = 'Connecting…'; }
         }
 
+        /* names shown in the Online Now list (matched by login email) */
+        const FZ_NAMES = { 'blueis.office@gmail.com': 'Ashif' };
+        const fzDisplayName = u => FZ_NAMES[String((u && u.email) || '').toLowerCase()] || (u && (u.name || u.email)) || 'Someone';
+
         function flattenPresence(state) {
             const out = [], seen = new Set();
             Object.values(state || {}).forEach(list => (list || []).forEach(p => {
@@ -2580,7 +2780,7 @@
                 listEl.innerHTML = users.length ? users.map(u => `
                     <div class="notif-item" style="cursor:default;">
                         <div class="n-icon" style="${u.status === 'away' ? 'background:rgba(255,177,0,0.16); color:var(--warning);' : 'background:rgba(60,190,120,0.14); color:var(--success);'}"><i class="fa-solid fa-circle" style="font-size:.45rem;"></i></div>
-                        <div class="n-text"><strong>${escapeHtml(u.name || u.email || 'Someone')}</strong><br><small style="color:var(--text-muted);">${u.role === 'admin' ? 'Admin' : 'Employee'} · ${u.status === 'away' ? 'away' : 'online now'}</small></div>
+                        <div class="n-text"><strong>${escapeHtml(fzDisplayName(u))}</strong><br><small style="color:var(--text-muted);">${u.role === 'admin' ? 'Admin' : 'Employee'} · ${u.status === 'away' ? 'away' : 'online now'}</small></div>
                     </div>`).join('') : `<div class="empty-row" style="padding:1.2rem;">No one else online right now</div>`;
             }
         }
@@ -2594,7 +2794,7 @@
                 .subscribe(async (status) => {
                     updateLiveStatus(status);
                     if (status === 'SUBSCRIBED') {
-                        await presenceChannel.track({ name: email.split('@')[0], email, role: 'admin', online_at: new Date().toISOString() });
+                        await presenceChannel.track({ name: fzDisplayName({ email, name: email.split('@')[0] }), email, role: 'admin', online_at: new Date().toISOString() });
                     }
                 });
         }
@@ -3978,6 +4178,7 @@
             const b = document.getElementById('navBadgeAlerts'); if (b) { b.textContent = a.length; b.style.display = a.length ? '' : 'none'; }
             renderExpenseStats();
             if (typeof renderBrief === 'function') renderBrief();
+            if (typeof fzPopCheck === 'function') fzPopCheck();
             return a;
         }
         async function markBillPaid(id) {
@@ -4002,7 +4203,6 @@
         const fzNotified = new Set();
         function fzNotify(key, title, body) {
             if (fzNotified.has(key)) return; fzNotified.add(key);
-            showToast(title + ': ' + body, 'info');
             if ('Notification' in window && Notification.permission === 'granted') { try { new Notification(title, { body }); } catch (e) {} }
         }
         function fzCheckReminders() {
@@ -4019,6 +4219,80 @@
         }
         setInterval(() => { refreshAlerts(); fzCheckReminders(); }, 60000);
         setTimeout(() => { refreshAlerts(); fzCheckReminders(); }, 4000);
+        /* ----------------------------------------------------
+           REMINDER POP-UPS: bills, recharges, meetings slide in on whatever page is open
+        ---------------------------------------------------- */
+        const FZ_POP = { max: 3, items: {}, vibrated: new Set() };
+        function fzPopLoad() { try { return JSON.parse(localStorage.getItem('fz_pop') || '{}'); } catch (e) { return {}; } }
+        function fzPopSave(o) { try { localStorage.setItem('fz_pop', JSON.stringify(o)); } catch (e) {} }
+        function fzPopIcon(b) {
+            const t = ((b.category || '') + ' ' + (b.title || '')).toLowerCase();
+            return /wifi|wi-fi|internet|broadband/.test(t) ? 'fa-wifi' : /current|electric|\beb\b|power/.test(t) ? 'fa-bolt' : /recharge|mobile|phone|sim|airtel|jio/.test(t) ? 'fa-mobile-screen-button' : /rent/.test(t) ? 'fa-building' : /water/.test(t) ? 'fa-droplet' : /insurance/.test(t) ? 'fa-shield-halved' : /emi|loan/.test(t) ? 'fa-landmark' : /salary|wage/.test(t) ? 'fa-users' : /software|domain|hosting|subscription/.test(t) ? 'fa-cloud' : 'fa-file-invoice-dollar';
+        }
+        function fzPopItems() {
+            const out = [], st = fzPopLoad(), day = todayISO(), nowMs = Date.now(), dis = st.d || {}, snz = st.s || {};
+            (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && b.next_due).forEach(b => {
+                const d = daysFrom(b.next_due); if (d > (b.remind_days ?? 3)) return;
+                const key = 'b' + b.id + '|' + b.next_due; if (dis[key] === day || (snz[key] || 0) > nowMs) return;
+                out.push({ key, kind: 'bill', id: b.id, pri: d < 0 ? 0 : d === 0 ? 2 : 4 + d, tone: d < 0 ? 'red' : d === 0 ? 'amber' : 'blue', icon: fzPopIcon(b),
+                    tag: d < 0 ? 'Overdue by ' + (-d) + (d === -1 ? ' day' : ' days') : d === 0 ? 'Due today' : 'Due in ' + d + (d === 1 ? ' day' : ' days'),
+                    title: b.title, sub: fmtMoney(b.amount) + ' · ' + fmtDate(b.next_due) });
+            });
+            (moduleCache.meetings || []).filter(m => m.status === 'Scheduled' && m.meeting_date === day && m.meeting_time).forEach(m => {
+                const t = parseISO(m.meeting_date), pt = String(m.meeting_time).split(':').map(Number); t.setHours(pt[0], pt[1] || 0, 0, 0);
+                const mins = (t - new Date()) / 60000, lead = REMIND_MIN[m.remind_before] || 30;
+                if (mins > Math.min(lead, 1440) || mins < -10) return;
+                const key = 'm' + m.id + m.meeting_date + m.meeting_time; if (dis[key] === day || (snz[key] || 0) > nowMs) return;
+                out.push({ key, kind: 'meet', id: m.id, ts: t.getTime(), pri: 1, tone: mins <= 5 ? 'red' : 'amber', icon: 'fa-video', tag: mins > 0 ? 'Meeting soon' : 'Meeting now', title: m.title, sub: [paT12(m.meeting_time), m.with_whom ? 'with ' + m.with_whom : '', m.place || ''].filter(Boolean).join(' · ') });
+            });
+            return out.sort((a, b) => a.pri - b.pri);
+        }
+        function fzPopCard(it) {
+            const btns = it.kind === 'bill'
+                ? '<button class="go" data-act="pay">Mark paid</button><button data-act="snooze">Remind later</button>'
+                : '<button class="go" data-act="done">Done</button><button data-act="snooze">Snooze 10 min</button>';
+            return `<div class="fz-pop-card ${it.tone}" data-key="${escapeHtml(it.key)}"><div class="fz-pop-ico"><i class="fa-solid ${it.icon}"></i></div><div class="fz-pop-body"><div class="fz-pop-tag">${escapeHtml(it.tag)}</div><b class="fz-pop-t">${escapeHtml(it.title)}</b><div class="fz-pop-s">${escapeHtml(it.sub)}</div>${it.ts ? `<span class="fz-pop-cd" data-ts="${it.ts}"></span>` : ''}<div class="fz-pop-btns">${btns}<button data-act="open">View all</button></div></div><button class="fz-pop-x" data-act="close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button><i class="fz-pop-line"></i></div>`;
+        }
+        function fzPopRemove(el) { if (!el || el.classList.contains('out')) return; el.classList.add('out'); setTimeout(() => el.remove(), 420); }
+        function fzPopCheck() {
+            const host = document.getElementById('fz-pop'); if (!host) return;
+            const want = fzPopItems(), top = want.slice(0, FZ_POP.max), keys = new Set(want.map(x => x.key));
+            FZ_POP.items = {}; want.forEach(x => { FZ_POP.items[x.key] = x; });
+            host.querySelectorAll('.fz-pop-card').forEach(el => { if (!keys.has(el.dataset.key)) fzPopRemove(el); });
+            const have = new Set([...host.querySelectorAll('.fz-pop-card:not(.out)')].map(el => el.dataset.key));
+            const more = host.querySelector('.fz-pop-more'); if (more) more.remove();
+            top.forEach(it => {
+                if (have.has(it.key) || have.size >= FZ_POP.max) return;
+                const tmp = document.createElement('div'); tmp.innerHTML = fzPopCard(it); host.appendChild(tmp.firstElementChild); have.add(it.key);
+                if (!FZ_POP.vibrated.has(it.key)) { FZ_POP.vibrated.add(it.key); try { navigator.vibrate && navigator.vibrate([180, 90, 180]); } catch (e) {} }
+            });
+            const left = want.length - have.size;
+            if (left > 0) { const b = document.createElement('button'); b.className = 'fz-pop-more'; b.dataset.act = 'open'; b.textContent = '+' + left + ' more ' + (left > 1 ? 'reminders' : 'reminder'); host.appendChild(b); }
+            fzPopTick();
+        }
+        function fzPopTick() {
+            document.querySelectorAll('.fz-pop-cd').forEach(el => {
+                const s = Math.round((Number(el.dataset.ts) - Date.now()) / 1000);
+                if (s <= 0) { el.textContent = s > -60 ? 'Starting now' : 'Started ' + Math.round(-s / 60) + ' min ago'; return; }
+                const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+                el.textContent = 'in ' + (h ? h + 'h ' : '') + (m || h ? m + 'm ' : '') + pad2(x) + 's';
+            });
+        }
+        document.addEventListener('click', async e => {
+            const btn = e.target.closest && e.target.closest('#fz-pop [data-act]'); if (!btn) return;
+            const act = btn.dataset.act, card = btn.closest('.fz-pop-card'), it = card && FZ_POP.items[card.dataset.key];
+            if (act === 'open') { fzGoTo('reminders'); return; }
+            if (!it) return;
+            const st = fzPopLoad(); st.d = st.d || {}; st.s = st.s || {};
+            Object.keys(st.d).forEach(k => { if (st.d[k] !== todayISO()) delete st.d[k]; }); Object.keys(st.s).forEach(k => { if (st.s[k] < Date.now()) delete st.s[k]; });
+            if (act === 'close') { st.d[it.key] = todayISO(); fzPopSave(st); fzPopRemove(card); }
+            else if (act === 'snooze') { st.s[it.key] = Date.now() + (it.kind === 'meet' ? 10 : 120) * 60000; fzPopSave(st); fzPopRemove(card); showToast('Okay, I will remind you again later'); }
+            else if (act === 'done') { await markMeetingDone(it.id); fzPopCheck(); }
+            else if (act === 'pay') { await markBillPaid(it.id); setTimeout(fzPopCheck, 600); }
+        });
+        setInterval(fzPopTick, 1000);
+        setInterval(fzPopCheck, 20000);
+        [3500, 9000, 16000].forEach(ms => setTimeout(fzPopCheck, ms));
         async function fzEnablePush() {
             await enablePushOnThisDevice();
             try {
@@ -5647,12 +5921,117 @@
             return `I didn't get that. Try: <em>lead summary</em>, <em>follow-ups today</em>, <em>overdue invoices</em>, <em>expenses this month</em>, <em>upcoming bills</em> or <em>alerts</em>.`;
         }
 
+        /* Live typing reveal: text is laid out first (no jumping), then letters switch on one by one like a real
+           computer typing - human-like rhythm (pauses on , . ? !), hot cyan glow on the newest letters,
+           zero-width blinking caret, chips pop in. Click the bubble to skip. */
+        function aiReveal(bubble, body) {
+            if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const walker = document.createTreeWalker(bubble, NodeFilter.SHOW_TEXT, {
+                acceptNode: n => (!n.nodeValue.trim() || n.parentNode.closest('.mini-stat')) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+            });
+            const textSet = new Set(); let n;
+            while ((n = walker.nextNode())) textSet.add(n);
+            const queue = [];
+            (function walk(node) {
+                node.childNodes.forEach(c => {
+                    if (c.nodeType === 3 && textSet.has(c)) queue.push(c);
+                    else if (c.nodeType === 1) { if (c.classList.contains('mini-stat')) queue.push(c); else walk(c); }
+                });
+            })(bubble);
+
+            const units = [];                     // {el, t} in reading order
+            queue.forEach(item => {
+                if (item.nodeType === 1) { item.classList.add('rv-chip'); units.push({ el: item, chip: true }); return; }
+                const frag = document.createDocumentFragment();
+                item.nodeValue.split(/(\s+)/).forEach(part => {
+                    if (!part) return;
+                    if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+                    const w = document.createElement('span'); w.className = 'rv-w';
+                    for (const ch of part) {
+                        const c = document.createElement('span'); c.className = 'rv-c'; c.textContent = ch;
+                        w.appendChild(c); units.push({ el: c, ch });
+                    }
+                    frag.appendChild(w);
+                });
+                item.parentNode.replaceChild(frag, item);
+            });
+            if (!units.length) return;
+
+            // human-like schedule: jitter, small pause after words, longer after punctuation
+            let t = 350, prevSpace = false;       // short "starts typing" delay
+            const base = 24;
+            units.forEach((u, i) => {
+                if (u.chip) { t += 140; u.t = t; t += 120; return; }
+                u.t = t;
+                let d = base * (0.6 + Math.random() * 0.9);
+                if (/[,;:]/.test(u.ch)) d += 110;
+                else if (/[.!?—]/.test(u.ch)) d += 240;
+                const nextW = units[i + 1];
+                if (!nextW || nextW.el.parentNode !== u.el.parentNode) d += 22;   // word boundary
+                t += d;
+            });
+            const MAX = 6000;                     // long answers speed up to finish within ~6s
+            if (t > MAX) { const k = (MAX - 350) / (t - 350); units.forEach(u => { u.t = 350 + (u.t - 350) * k; }); t = MAX; }
+
+            const caret = document.createElement('span'); caret.className = 'rv-caret';
+            let idx = 0, done = false, raf = 0, start = performance.now();
+            const follow = () => {                // keep the caret in view inside the chat scroller
+                const cr = caret.getBoundingClientRect(), br = body.getBoundingClientRect();
+                if (cr.bottom > br.bottom - 10) body.scrollTop += (cr.bottom - br.bottom + 14);
+            };
+            const show = u => {
+                u.el.classList.add('on');
+                if (!u.chip) u.el.parentNode.insertBefore(caret, u.el.nextSibling);
+            };
+            const burst = () => {                  // finale: star blooms, throws sparkles, vanishes
+                const pal = ['#ffffff', '#8fefff', '#19D3FF', '#a78bfa', '#ff7ad9', '#ffe27a'];
+                for (let k = 0; k < 10; k++) {
+                    const sp = document.createElement('i'); sp.className = 'rv-spark';
+                    const ang = (Math.PI * 2 * k) / 10 + Math.random() * 0.5, dist = 22 + Math.random() * 34;
+                    sp.style.setProperty('--x', Math.round(Math.cos(ang) * dist) + 'px');
+                    sp.style.setProperty('--y', Math.round(Math.sin(ang) * dist) + 'px');
+                    sp.style.setProperty('--s', (4 + Math.random() * 6).toFixed(1) + 'px');
+                    sp.style.setProperty('--c', pal[k % pal.length]);
+                    sp.style.setProperty('--dl', Math.round(120 + Math.random() * 160) + 'ms');
+                    caret.appendChild(sp);
+                }
+                caret.classList.add('rv-end');
+                if (bubble.parentNode) bubble.parentNode.classList.add('rv-done');
+                setTimeout(() => caret.remove(), 1200);
+            };
+            const finish = () => {
+                if (done) return; done = true; cancelAnimationFrame(raf);
+                while (idx < units.length) { units[idx].el.classList.add('on'); idx++; }
+                bubble.removeEventListener('click', finish);
+                for (let k = units.length - 1; k >= 0; k--) {       // park the star after the last letter
+                    if (!units[k].chip) { units[k].el.parentNode.insertBefore(caret, units[k].el.nextSibling); break; }
+                }
+                body.scrollTop = body.scrollHeight;
+                burst();
+                setTimeout(() => { body.scrollTop = body.scrollHeight; }, 400);
+            };
+            const tick = now => {
+                if (done) return;
+                const el = now - start;
+                while (idx < units.length && units[idx].t <= el) show(units[idx++]);
+                if (idx < units.length) { follow(); raf = requestAnimationFrame(tick); } else finish();
+            };
+            bubble.addEventListener('click', finish);
+            units[0].el.parentNode.insertBefore(caret, units[0].el);   // starts at the first letter, not at the bubble's end
+            raf = requestAnimationFrame(tick);
+            setTimeout(finish, t + 1500);         // safety net (also covers background tabs)
+        }
+
         function addAiMessage(html, sender) {
             const body = document.getElementById('aiChatBody');
             const row = document.createElement('div');
             row.className = `ai-msg ${sender}`;
             row.innerHTML = `<div class="ai-msg-bubble">${html}</div>`;
             body.appendChild(row);
+            if (sender === 'bot') {
+                row.classList.add('rv-in');
+                try { aiReveal(row.firstElementChild, body); } catch (e) { console.warn('reveal skipped', e); }
+            }
             body.scrollTop = body.scrollHeight;
             return row;
         }
@@ -5661,8 +6040,11 @@
             const body = document.getElementById('aiChatBody');
             const row = document.createElement('div');
             row.className = 'ai-msg bot';
-            row.innerHTML = `<div class="ai-msg-bubble"><div class="ai-typing"><span></span><span></span><span></span></div></div>`;
+            row.innerHTML = `<div class="ai-msg-bubble"><div class="ai-typing"><span></span><span></span><span></span><span class="ai-think-t">Thinking…</span></div></div>`;
             body.appendChild(row);
+            const labels = ['Thinking…', 'Reading your data…', 'Crunching numbers…', 'Writing reply…'];
+            let k = 0; const lab = row.querySelector('.ai-think-t');
+            row._iv = setInterval(() => { k = (k + 1) % labels.length; lab.textContent = labels[k]; }, 650);
             body.scrollTop = body.scrollHeight;
             return row;
         }
@@ -5677,6 +6059,7 @@
             addAiMessage(escapeHtml(q), 'user');
             input.value = '';
             const typingRow = showAiTyping();
+            const aiT0 = Date.now();
             let html;
             try {
                 if (!aiFlow) await aiRefresh();         // always answer from fresh Supabase data
@@ -5685,6 +6068,9 @@
                 console.error(e);
                 html = `Something went wrong — ${escapeHtml(e.message || 'unknown error')}. Please try again in a moment.`;
             }
+            const wait = 900 - (Date.now() - aiT0);             // always "think" a little so it feels alive
+            if (wait > 0) await new Promise(r => setTimeout(r, wait));
+            clearInterval(typingRow._iv);
             typingRow.remove();
             addAiMessage(html, 'bot');
             aiBusy = false;
@@ -5720,6 +6106,448 @@
                 })
                 .subscribe();
         }
+
+        /* ----------------------------------------------------
+           PERSONAL ASSISTANT (PA): calendar, next meeting, money, alerts + human-tone chat
+        ---------------------------------------------------- */
+        const PA = { month: null, sel: null, ready: false, briefed: false, nudged: new Set(), last: null };
+        const paPick = a => a[Math.floor(Math.random() * a.length)];
+        const paMoney = n => '₹' + (Number(n) || 0).toLocaleString('en-IN');
+        const paIsUrl = s => /^(https?:\/\/|www\.)/i.test(String(s || '').trim());
+        function paT12(t) { if (!t) return ''; const [h, m] = String(t).split(':').map(Number); return ((h % 12) || 12) + ':' + pad2(m || 0) + ' ' + (h >= 12 ? 'PM' : 'AM'); }
+        function paStart(m) { if (!m.meeting_date) return null; const d = parseISO(m.meeting_date); const [h, mi] = String(m.meeting_time || '09:00').split(':').map(Number); d.setHours(h, mi || 0, 0, 0); return d; }
+        function paIn(mins) { mins = Math.round(mins); if (mins < 1) return 'now'; if (mins < 60) return mins + ' min'; const h = Math.floor(mins / 60), r = mins % 60; if (h < 24) return h + 'h' + (r ? ' ' + r + 'm' : ''); const d = Math.floor(h / 24); return d + ' day' + (d > 1 ? 's' : ''); }
+        function paDayName(iso) { const d = daysFrom(iso); return d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : d === -1 ? 'Yesterday' : parseISO(iso).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' }); }
+
+        /* ---- data ---- */
+        function paEvents(iso) {
+            const ev = [];
+            (moduleCache.meetings || []).filter(m => m.meeting_date === iso && m.status !== 'Cancelled').forEach(m => ev.push({ k: 'meet', t: m.meeting_time || '', icon: 'fa-video', col: '#4C8DFF', title: m.title, sub: [m.with_whom ? 'with ' + m.with_whom : '', m.place || ''].filter(Boolean).join(' · '), done: m.status === 'Done', id: m.id }));
+            (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && b.next_due === iso).forEach(b => ev.push({ k: 'bill', t: '', icon: 'fa-receipt', col: '#FFB547', title: b.title + ' due', sub: paMoney(b.amount) }));
+            (typeof fzProjects !== 'undefined' ? fzProjects : []).filter(p => p.due_date === iso && !/cancel|complete|invoice/i.test(p.status || '')).forEach(p => ev.push({ k: 'proj', t: '', icon: 'fa-diagram-project', col: '#a78bfa', title: 'Project: ' + p.name, sub: p.client || '' }));
+            return ev.sort((a, b) => (a.t || '99').localeCompare(b.t || '99'));
+        }
+        function paNextMeeting() {
+            const now = new Date();
+            return (moduleCache.meetings || []).filter(m => m.status === 'Scheduled').map(m => ({ m, d: paStart(m) })).filter(x => x.d && x.d >= new Date(now - 5 * 60000)).sort((a, b) => a.d - b.d)[0] || null;
+        }
+        function paMonthMoney(ym) {
+            ym = ym || todayISO().slice(0, 7);
+            const exp = (moduleCache.expenses || []).filter(e => String(e.exp_date).startsWith(ym)).reduce((a, e) => a + (Number(e.amount) || 0), 0);
+            const inc = (moduleCache.cash_bank || []).filter(c => c.direction === 'Received' && String(c.txn_date).startsWith(ym)).reduce((a, c) => a + (Number(c.amount) || 0), 0);
+            return { inc, exp, net: inc - exp };
+        }
+
+        /* ---- plan UI ---- */
+        function paRenderAll() {
+            const h = new Date().getHours();
+            setText('paGreet', (h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening') + ', boss');
+            const td = paEvents(todayISO()).filter(e => e.k === 'meet' && !e.done).length, nx = paNextMeeting();
+            setText('paSub', td ? `${td} meeting${td > 1 ? 's' : ''} today${nx ? ' · next in ' + paIn((nx.d - new Date()) / 60000) : ''}` : 'No meetings today. A clear day!');
+            paRenderNext(); paRenderCal(); paRenderDay(); paRenderMoney(); paRenderAttn();
+        }
+        let paDateShown = '';
+        function paTickClock() {
+            const n = new Date(), el = document.getElementById('paClock'); if (!el) return;
+            const h = n.getHours(), h12 = (h % 12) || 12;
+            el.innerHTML = pad2(h12) + ':' + pad2(n.getMinutes()) + '<span class="pa-sec">:' + pad2(n.getSeconds()) + '</span><span class="pa-ap">' + (h >= 12 ? 'pm' : 'am') + '</span>';
+            const d = n.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+            if (d !== paDateShown) { paDateShown = d; setText('paDate', d); }
+        }
+        /* ticks exactly on each real second, only while the PA page is open */
+        function paClockLoop() {
+            if (document.getElementById('pa').classList.contains('active')) paTickClock();
+            setTimeout(paClockLoop, 1000 - (Date.now() % 1000) + 8);
+        }
+        function paRenderNext() {
+            const el = document.getElementById('paNext'), n = paNextMeeting();
+            if (!n) { el.innerHTML = '<small>Next up</small><h3>Nothing scheduled</h3><p class="pa-empty" style="margin:0">Tell me in the chat: <i>"meeting with Ravi tomorrow 4pm"</i> and I will book it.</p>'; return; }
+            const m = n.m, mins = (n.d - new Date()) / 60000;
+            el.innerHTML = `<small>Next up · ${paDayName(m.meeting_date)}</small><h3>${escapeHtml(m.title)}</h3>
+                <div class="pa-in">${mins <= 0 ? 'Happening now' : 'in ' + paIn(mins)}</div>
+                <div style="color:var(--text-muted);font-size:.85rem;margin-top:.2rem">${paT12(m.meeting_time)}${m.with_whom ? ' · with ' + escapeHtml(m.with_whom) : ''}${m.place ? ' · ' + escapeHtml(m.place) : ''}</div>
+                <div class="pa-btns">${paIsUrl(m.place) ? `<button class="go" onclick="window.open('${escapeHtml(/^http/i.test(m.place) ? m.place : 'https://' + m.place)}','_blank')"><i class="fa-solid fa-video"></i> Join</button>` : ''}<button onclick="paDone('${m.id}')"><i class="fa-solid fa-check"></i> Mark done</button><button onclick="paCancel('${m.id}')">Cancel</button></div>`;
+        }
+        function paRenderCal() {
+            const base = PA.month, y = base.getFullYear(), mo = base.getMonth(), first = new Date(y, mo, 1).getDay(), dim = new Date(y, mo + 1, 0).getDate();
+            setText('paMonth', base.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }));
+            let html = '';
+            for (let i = 0; i < 42; i++) {
+                const d = new Date(y, mo, 1 - first + i), iso = toISO(d), out = d.getMonth() !== mo, ev = out ? [] : paEvents(iso);
+                const kinds = [...new Set(ev.map(e => e.k))], col = { meet: '#4C8DFF', bill: '#FFB547', proj: '#a78bfa' };
+                html += `<div class="pa-c${out ? ' out' : ''}${iso === todayISO() ? ' today' : ''}${iso === PA.sel ? ' sel' : ''}" data-d="${iso}">${d.getDate()}<span class="pa-dots">${kinds.map(k => `<i style="background:${col[k]}"></i>`).join('')}</span></div>`;
+                if (i === 34 && new Date(y, mo, 1 - first + 35).getMonth() !== mo) break;
+            }
+            document.getElementById('paCalGrid').innerHTML = html;
+        }
+        function paRenderDay() {
+            setText('paDayTitle', paDayName(PA.sel));
+            const ev = paEvents(PA.sel);
+            document.getElementById('paDayList').innerHTML = ev.length ? ev.map(e => `<div class="pa-ev${e.done ? ' done' : ''}"><i class="fa-solid ${e.icon}" style="color:${e.col}"></i><div><b>${escapeHtml(e.title)}</b>${e.sub ? '<small>' + escapeHtml(e.sub) + '</small>' : ''}</div>${e.t ? `<span class="pa-t">${paT12(e.t)}</span>` : ''}</div>`).join('') : '<div class="pa-empty">Nothing planned. Free day</div>';
+        }
+        function paRenderMoney() {
+            const s = paMonthMoney(), tot = s.inc + s.exp, pct = tot ? Math.round(s.inc / tot * 100) : 50;
+            document.getElementById('paMoney').innerHTML = `<div class="pa-m"><span>Income</span><b style="color:#05CD99">${paMoney(s.inc)}</b></div><div class="pa-m"><span>Expenses</span><b style="color:#EE5D50">${paMoney(s.exp)}</b></div>
+                <div class="pa-bar"><i style="width:${pct}%"></i></div><div class="pa-m" style="border:0"><span>${s.net >= 0 ? 'Profit' : 'Loss'} so far</span><b>${paMoney(Math.abs(s.net))}</b></div>`;
+        }
+        function paRenderAttn() {
+            const a = typeof getAlerts === 'function' ? getAlerts() : [];
+            document.getElementById('paAttn').innerHTML = a.length ? a.slice(0, 6).map(x => `<div class="fz-alert ${x.tone}"><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.sub)}</small></div><button onclick="${x.act}">${x.btn}</button></div>`).join('') : '<div class="pa-empty">All clear. Nothing urgent</div>';
+        }
+        async function paReload(keys) { await Promise.all((keys || ['meetings', 'expenses', 'cash_bank', 'recurring_bills']).map(k => loadModule(k))); paRenderAll(); if (typeof refreshAlerts === 'function') refreshAlerts(); }
+        async function paDone(id) { await markMeetingDone(id); paReload(['meetings']); paSay(paPick(['Super, marked as done', 'Done boss, moving on'])); }
+        async function paCancel(id) { const u = await sb.from('meetings').update({ status: 'Cancelled' }).eq('id', id); if (!u.error) { paReload(['meetings']); paSay('Cancelled it. Free slot now.'); } }
+
+        /* ---- chat plumbing (same typing + sparkle reveal as AI Analyst) ---- */
+        function paSay(html, noReveal) { return addPaMsg(html, 'bot'); }
+        function addPaMsg(html, sender) {
+            const body = document.getElementById('paChatBody'), row = document.createElement('div');
+            row.className = 'ai-msg ' + sender; row.innerHTML = `<div class="ai-msg-bubble">${html}</div>`; body.appendChild(row);
+            if (sender === 'bot') { row.classList.add('rv-in'); try { aiReveal(row.firstElementChild, body); } catch (e) {} }
+            body.scrollTop = body.scrollHeight; return row;
+        }
+        function paTyping() {
+            const body = document.getElementById('paChatBody'), row = document.createElement('div'); row.className = 'ai-msg bot';
+            row.innerHTML = '<div class="ai-msg-bubble"><div class="ai-typing"><span></span><span></span><span></span><span class="ai-think-t">Checking your calendar…</span></div></div>';
+            body.appendChild(row); const L = ['Checking your calendar…', 'Looking at your numbers…', 'Let me see…', 'Got it, one sec…']; let k = 0, lab = row.querySelector('.ai-think-t');
+            row._iv = setInterval(() => { k = (k + 1) % L.length; lab.textContent = L[k]; }, 600); body.scrollTop = body.scrollHeight; return row;
+        }
+
+        /* ---- understanding what you type ---- */
+        const PA_WD_RE = '(sunday|sun|gnayiru|gnayitru|nyayiru|monday|mon|thingal|tuesday|tues|tue|sevvai|chevvai|sevvaai|wednesday|wed|budhan|budan|thursday|thurs|thur|thu|viyazhan|vyazhan|viyalan|friday|fri|velli|saturday|sat|sani)';
+        const PA_MON_RE = '(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+        const paEsc = x => String(x).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const paHit = (...parts) => new RegExp(parts.filter(Boolean).map(paEsc).join('|'), 'gi');
+        function paStrip(text, ...hits) { let r = text; hits.filter(Boolean).forEach(re => { r = r.replace(re, ' '); }); return r.replace(/\s+/g, ' ').trim(); }
+        function paWdIndex(w) { w = w.toLowerCase(); if (/^(sun|gn|ny)/.test(w)) return 0; if (/^(mon|thin)/.test(w)) return 1; if (/^(tue|sev|che)/.test(w)) return 2; if (/^(wed|bud)/.test(w)) return 3; if (/^(thu|viy|vya)/.test(w)) return 4; if (/^(fri|vel)/.test(w)) return 5; return 6; }
+        const PA_MON = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+        function paMkDate(day, mon, year) {
+            const t = todayISO(), y = year || parseISO(t).getFullYear(); let d = new Date(y, mon, day);
+            if (d.getMonth() !== mon || d.getDate() !== day) return null;
+            let iso = toISO(d); if (!year && iso < t) { d = new Date(y + 1, mon, day); iso = toISO(d); } return iso;
+        }
+        function paParseDate(q) {
+            const t = todayISO(), dow = parseISO(t).getDay(); let m;
+            if ((m = q.match(/\bday after tomorrow\b|\b(?:naalaiku|naalaikku|naalai|nalai)\s+marunaal\b|\bmarunaal\b/))) return { iso: addDays(t, 2), hit: paHit(m[0]) };
+            if ((m = q.match(/\b(?:tomorrow|naalaikku|naalaiku|nalaiku|naalaiki|naalai|nalai|naale)\b|நாளை/))) return { iso: addDays(t, 1), hit: paHit(m[0]) };
+            if ((m = q.match(/\b(?:today|tonight|innaiku|innaikku|inniku|indru|inru)\b|இன்று/))) return { iso: t, hit: paHit(m[0]) };
+            if ((m = q.match(/\b(?:in|after)\s+(\d{1,2}|a|an|one)\s*(days?|weeks?)\b/)) || (m = q.match(/\b(\d{1,2})\s*(days?|weeks?)\s*(?:later|kazhichu)\b/))) { const n = /^\d/.test(m[1]) ? +m[1] : 1; return { iso: addDays(t, n * (/^w/.test(m[2]) ? 7 : 1)), hit: paHit(m[0]) }; }
+            if ((m = q.match(/\b(\d{4})-(\d{2})-(\d{2})\b/))) { const iso = paMkDate(+m[3], +m[2] - 1, +m[1]); if (iso) return { iso, hit: paHit(m[0]) }; }
+            if ((m = q.match(new RegExp('\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?' + PA_MON_RE + '\\b(?:,?\\s*(\\d{4}))?')))) { const iso = paMkDate(+m[1], PA_MON[m[2].slice(0, 3)], m[3] ? +m[3] : 0); if (iso) return { iso, hit: paHit(m[0]) }; }
+            if ((m = q.match(new RegExp('\\b' + PA_MON_RE + '\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b(?:,?\\s*(\\d{4}))?')))) { const iso = paMkDate(+m[2], PA_MON[m[1].slice(0, 3)], m[3] ? +m[3] : 0); if (iso) return { iso, hit: paHit(m[0]) }; }
+            if ((m = q.match(/\b(\d{1,2})[\/-](\d{1,2})(?:[\/-](\d{2,4}))?\b/)) && +m[2] <= 12 && +m[1] <= 31) { const yr = m[3] ? (m[3].length === 2 ? 2000 + +m[3] : +m[3]) : 0, iso = paMkDate(+m[1], +m[2] - 1, yr); if (iso) return { iso, hit: paHit(m[0]) }; }
+            const wd = q.match(new RegExp('\\b' + PA_WD_RE + '(?:\\s*(?:kizhamai|kilamai))?\\b'));
+            const nextWeek = q.match(/\b(?:of\s+)?next week\b|\badutha (?:vaaram|varam|week)\b/);
+            if (wd) {
+                const w = paWdIndex(wd[1]), mod = q.match(new RegExp('\\b(next|this|coming|upcoming|adutha)\\s+(?:week\\s+)?(?=' + PA_WD_RE + '\\b)'));
+                const wantNext = !!nextWeek || (mod && /next|adutha/.test(mod[1]));
+                const hit = paHit(wd[0], mod && mod[0].trim(), nextWeek && nextWeek[0]);
+                if (wantNext) { const mon = addDays(t, ((8 - dow) % 7) || 7); return { iso: addDays(mon, (w + 6) % 7), hit }; }
+                let diff = (w - dow + 7) % 7; if (diff === 0 && !(mod && /this|coming|upcoming/.test(mod[1]))) diff = 7;
+                return { iso: addDays(t, diff), hit };
+            }
+            if (nextWeek) return { iso: addDays(t, 7), hit: paHit(nextWeek[0]), approx: true };
+            if ((m = q.match(/\b(\d{1,2})(?:st|nd|rd|th)\b/)) && +m[1] >= 1 && +m[1] <= 31) { let d = parseISO(t); d.setDate(+m[1]); if (d.getDate() !== +m[1] || toISO(d) < t) { d = parseISO(t); d.setMonth(d.getMonth() + 1, +m[1]); } if (d.getDate() === +m[1]) return { iso: toISO(d), hit: paHit(m[0], 'on ' + m[0]) }; }
+            return null;
+        }
+        function paParseTime(q) {
+            const isAM = /\b(?:morning|kaalai|kalai)\b|காலை/.test(q), isPM = /\b(?:afternoon|evening|night|tonight|maalai|malai|raathiri|iravu|mathiyam|madhiyam)\b|மாலை|இரவு/.test(q);
+            const dp = h => (isPM && h < 12) ? h + 12 : (isAM && h === 12) ? 0 : h;
+            const guess = h => (isPM || isAM) ? dp(h) : (h >= 1 && h <= 7 ? h + 12 : h);
+            let m, h, mi = 0;
+            if ((m = q.match(/(?:\bat\s*)?\b(\d{1,2})(?:[:.](\d{2}))?\s*(a\.?m\.?|p\.?m\.?)(?![a-z])/)) && +m[1] >= 1 && +m[1] <= 12) { h = +m[1] % 12; if (/^p/.test(m[3])) h += 12; mi = +(m[2] || 0); }
+            else if ((m = q.match(/(?:\bat\s*)?\b(\d{1,2}):(\d{2})\b/))) { h = +m[1]; mi = +m[2]; if (h <= 12) h = dp(h); }
+            else if ((m = q.match(/\b(\d{1,2})(?:[:.](\d{2}))?\s*(?:mani|o'?clock|baje)\b/))) { h = guess(+m[1]); mi = +(m[2] || 0); }
+            else if ((m = q.match(/\b(?:morning|kaalai|kalai|afternoon|evening|night|maalai|malai|raathiri|iravu)\s*(?:at\s*)?(\d{1,2})(?:[:.](\d{2}))?(?![a-z\d])/))) { h = dp(+m[1]); mi = +(m[2] || 0); }
+            else if ((m = q.match(/\b(\d{1,2})(?:[:.](\d{2}))?\s*(?:in the\s+)?(?:morning|kaalai|kalai|afternoon|evening|night|maalai|malai|raathiri|iravu)\b/))) { h = dp(+m[1]); mi = +(m[2] || 0); }
+            else if ((m = q.match(/\bat\s*(\d{1,2})(?:[:.](\d{2}))?(?![a-z\d])/))) { h = guess(+m[1]); mi = +(m[2] || 0); }
+            if (m && h !== undefined && h < 24 && mi < 60) return { t: pad2(h) + ':' + pad2(mi), hit: paHit(m[0]) };
+            const W = [[/\b(?:tonight)\b/, '20:00'], [/\bmorning\b|\bkaalai\b/, '09:00'], [/\b(?:noon|lunch)\b/, '12:30'], [/\bafternoon\b/, '15:00'], [/\bevening\b|\bmaalai\b/, '18:00'], [/\bnight\b|\braathiri\b/, '20:00']];
+            for (const [re, tt] of W) { const x = q.match(re); if (x) return { t: tt, hit: paHit(x[0]), approx: true }; }
+            return null;
+        }
+        function paAmount(q) {
+            const m = q.match(/(?:₹|rs\.?|inr)?\s*(\d[\d,]*(?:\.\d+)?)\s*(k|thousand|lakh|lakhs|l)?\b/i); if (!m) return 0;
+            let v = parseFloat(m[1].replace(/,/g, '')); const u = (m[2] || '').toLowerCase(); if (u === 'k' || u === 'thousand') v *= 1000; else if (u) v *= 100000; return v;
+        }
+        function paCat(q) {
+            const C = [[/petrol|fuel|diesel|bus|train|auto|cab|travel|ticket/, 'Travel'], [/food|lunch|dinner|tea|coffee|biryani|biriyani|snack|breakfast|hotel/, 'Food'], [/recharge/, 'Mobile Recharge'], [/wifi|internet|broadband/, 'WiFi / Internet'], [/rent/, 'Office Rent'], [/current|\beb\b|electric/, 'Electricity'], [/salary|wages/, 'Salary'], [/\bads?\b|marketing|facebook|instagram|promotion/, 'Marketing'], [/software|subscription|domain|hosting|tool|license/, 'Software / Tools']];
+            for (const [re, c] of C) if (re.test(q)) return c; return 'Other';
+        }
+        function paClean(txt, hits) { let s = txt; hits.filter(Boolean).forEach(re => { s = s.replace(re, ' '); }); return s.replace(/\b(please|pls|can you|could you|add|set|book|arrange|create|fix|schedule|a|an|the|for me|me|to|remind|reminder|meeting|meet|call)\b/gi, ' ').replace(/\s+/g, ' ').trim(); }
+
+        /* ---- actions ---- */
+        function paKnownName(n) {
+            const k = String(n || '').toLowerCase().replace(/[^a-z0-9]/g, ''), cap = x => x.replace(/\b\w/g, c => c.toUpperCase()); if (!k) return n;
+            const pool = []; (moduleCache.meetings || []).forEach(m => m.with_whom && pool.push(m.with_whom)); (moduleCache.leads || []).forEach(l => l.name && pool.push(l.name)); (moduleCache.clients || []).forEach(c => c.name && pool.push(c.name)); (moduleCache.notes || []).forEach(x => x.related && pool.push(x.related));
+            const nz = x => String(x).toLowerCase().replace(/[^a-z0-9]/g, ''), hits = pool.filter(x => nz(x) === k || (k.length >= 4 && nz(x).startsWith(k))).sort((x, y) => y.trim().split(/\s+/).length - x.trim().split(/\s+/).length);
+            return hits.length ? hits[0].trim() : cap(String(n).trim());
+        }
+        async function paCreateMeeting(raw) {
+            const q = raw.toLowerCase(), d = paParseDate(q), tm = paParseTime(q), now = new Date(), today = todayISO(), nowHM = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+            const isRem = /\b(?:remind|reminder|reminders|alert)\b/.test(q), cap = x => x.replace(/^\s+/, '').replace(/^./, c => c.toUpperCase());
+            if (!d && !tm) return 'Eppo boss? Date, time sollunga. Example: <em>"meeting with Ravi tomorrow 4pm"</em> or <em>"meeting with Ravi next friday 11am"</em>.';
+            let date = d ? d.iso : today, time = tm ? tm.t : '10:00'; const notes = [];
+            if (date < today) return `Antha date (${escapeHtml(paDayName(date))}) already poiduchu boss. Vera date sollunga.`;
+            if (date === today && tm && !tm.approx && time <= nowHM) { if (d) return `Innaiku ${paT12(time)} already poiduchu boss. Naalaikku vaikkalama, illa vera time sollunga?`; date = addDays(today, 1); notes.push('Indha time already poiduchu, so naalaikku set pannitten'); }
+            if (!tm) notes.push('Time sollala, so 10 AM vachuten');
+            if (d && d.approx) notes.push('Adutha vaaram same day eduthukitten');
+            let rest = paStrip(raw, d && d.hit, tm && tm.hit), url = rest.match(/https?:\/\/\S+|www\.\S+/i); if (url) rest = rest.replace(url[0], ' ');
+            const pm = rest.match(/\bwith\s+(.+?)(?=\s+(?:at|on|by|tomorrow|today|tonight|next|this|in|for|about|regarding|to|re|discuss|and|please|pls)\b|[,;]|$)/i) || rest.match(/\b([a-z][a-z .&']{1,30}?)\s+kooda\b/i);
+            let person = null; if (pm) { person = paKnownName(pm[1]); rest = rest.replace(pm[0], ' '); }
+            const tp = rest.match(/\b(?:about|regarding|to discuss|discuss|re|for)\s+(.+)$/i); let topic = ''; if (tp) { topic = tp[1]; rest = rest.replace(tp[0], ' '); }
+            const clean = x => x.replace(/\b(please|pls|can you|could you|kindly|add|set|book|arrange|create|fix|schedule|plan|put|remind|reminder|reminders|alert|me|meeting|meet|appointment|a|an|the|for|to|at|on|in|by|next|this|week|pannu|pannunga|pannidunga|pannidu|panni|vai|vaiyunga|vaipom|venum|kudu|kudunga|ku|la|oda|kooda|mani|today|tomorrow|tonight|morning|afternoon|evening|night|noon|and|with|call)\b/gi, ' ').replace(/[,;:\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+            const left = clean(rest), label = /\bcall\b/.test(q) && !isRem ? 'Call' : 'Meeting'; topic = clean(topic) || left;
+            let title;
+            if (isRem) { const body = clean(rest.replace(/\bcall\b/gi, 'call_')).replace(/call_/g, 'call'); title = body ? cap(body) : person ? 'Reminder: ' + person : 'Reminder'; if (person && body) title += ' (' + person + ')'; }
+            else if (person) title = label + ' with ' + person + (topic ? ' - ' + cap(topic) : '');
+            else title = topic ? cap(topic) : label;
+            const row = { title, meeting_date: date, meeting_time: time, with_whom: person || null, remind_before: '30 minutes', status: 'Scheduled', note: isRem ? 'Reminder (added by PA)' : 'Added by PA' }; if (url) row.place = url[0];
+            await loadModule('meetings');
+            const nz = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const dup = (moduleCache.meetings || []).find(m => m.status === 'Scheduled' && m.meeting_date === date && String(m.meeting_time || '').slice(0, 5) === time && (nz(m.title) === nz(title) || (person && nz(m.with_whom) === nz(person))));
+            if (dup) return `Idhu already booked boss: <strong>${escapeHtml(dup.title)}</strong> - ${escapeHtml(paDayName(date))} ${paT12(time)}. Thirumba add pannala.`;
+            const r = await sb.from('meetings').insert(row).select().single();
+            if (r.error) return `Aiyo, save panna mudiyala boss: ${escapeHtml(r.error.message)}`;
+            PA.last = { table: 'meetings', id: r.data.id }; paReload(['meetings']);
+            const clash = (moduleCache.meetings || []).filter(m => m.id !== r.data.id && m.status === 'Scheduled' && m.meeting_date === date && String(m.meeting_time || '').slice(0, 5) === time);
+            const dn = paDayName(date) + (daysFrom(date) <= 1 ? ' (' + parseISO(date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) + ')' : '');
+            return `${paPick(['Done boss!', 'Seri, pannitten!', 'Booked.'])} <strong>${escapeHtml(title)}</strong><br>${escapeHtml(dn)} at ${paT12(time)}${notes.length ? '<br><small>' + notes.map(escapeHtml).join('. ') + '</small>' : ''}<br>${aiStat('fa-bell', 'I will alert you 30 min before')}${clash.length ? `<br>Heads up, same time-la <strong>${escapeHtml(clash[0].title)}</strong> irukku.` : ''} <button class="pa-undo" onclick="paUndo('meetings','${r.data.id}',this)">Undo</button>`;
+        }
+        async function paCreateMoney(raw, income) {
+            const q = raw.toLowerCase(), amt = paAmount(q.replace(/\b\d{1,2}(?::\d{2})?\s*(am|pm)\b/g, ' '));
+            if (!amt) return 'Evlo amount nu sollunga boss? Example: <em>"spent 450 on petrol"</em>.';
+            const d = /yesterday|nethu/.test(q) ? addDays(todayISO(), -1) : todayISO();
+            let res;
+            if (income) {
+                const fm = q.match(/from ([a-z0-9 .&']+?)(?=\s+(?:for|on|via|by|through|today|yesterday)\b|$)/), mode = /cash/.test(q) ? 'Cash' : /bank|neft|imps|transfer/.test(q) ? 'Bank' : 'UPI';
+                res = await sb.from('cash_bank').insert({ txn_date: d, customer: fm ? fm[1].replace(/\b\w/g, c => c.toUpperCase()) : 'Walk-in', direction: 'Received', mode, amount: amt, note: 'Added by PA' }).select().single();
+                if (res.error) return 'Save aagala boss: ' + escapeHtml(res.error.message);
+                PA.last = { table: 'cash_bank', id: res.data.id };
+            } else {
+                const cat = paCat(q), title = paClean(raw.replace(/(?:₹|rs\.?)?\s*\d[\d,]*(?:\.\d+)?\s*(k|thousand|lakh)?/i, ' '), [/\b(spent|spend|paid|pay|expense|on|for|yesterday|today)\b/gi]) || cat;
+                res = await sb.from('expenses').insert({ exp_date: d, category: cat, title: title.charAt(0).toUpperCase() + title.slice(1), amount: amt, mode: /cash/.test(q) ? 'Cash' : 'UPI', note: 'Added by PA' }).select().single();
+                if (res.error) return 'Save aagala boss: ' + escapeHtml(res.error.message);
+                PA.last = { table: 'expenses', id: res.data.id };
+            }
+            paReload([income ? 'cash_bank' : 'expenses']); const s = paMonthMoney();
+            return `${income ? paPick(['Super news!', 'Nice, panam vandhuduchu']) : paPick(['Noted boss', 'Seri, expense list-la potuten'])} <strong>${paMoney(amt)}</strong> ${income ? 'income' : 'for ' + escapeHtml(res.data.title) + ' (' + escapeHtml(res.data.category) + ')'}.<br>${aiStat('fa-arrow-trend-up', 'Income ' + paMoney(s.inc))} ${aiStat('fa-arrow-trend-down', 'Spent ' + paMoney(s.exp))} <button class="pa-undo" onclick="paUndo('${PA.last.table}','${PA.last.id}',this)">Undo</button>`;
+        }
+        async function paUndo(table, id, btn) {
+            const r = await sb.from(table).delete().eq('id', id); if (btn) btn.remove();
+            if (r.error) { paSay('Undo panna mudiyala: ' + escapeHtml(r.error.message)); return; }
+            paReload([table]); paSay(paPick(['Okay, remove pannitten. Nothing happened', 'Undo done boss.']));
+        }
+
+        /* ---- answers ---- */
+        function paAgenda(iso, label) {
+            const ev = paEvents(iso).filter(e => !e.done);
+            if (!ev.length) return `${label}-ku ${paPick(['onnume illa boss, free day!', 'plan edhuvum illa. Relax pannalaam'])}`;
+            return `${label} plan idhu:<ul>${ev.map(e => `<li>${e.t ? '<strong>' + paT12(e.t) + '</strong> — ' : ''}${escapeHtml(e.title)}${e.sub ? ' <small>(' + escapeHtml(e.sub) + ')</small>' : ''}</li>`).join('')}</ul>`;
+        }
+        function paWeek() {
+            let out = []; for (let i = 0; i < 7; i++) { const iso = addDays(todayISO(), i), ev = paEvents(iso).filter(e => !e.done); if (ev.length) out.push(`<li><strong>${paDayName(iso)}</strong>: ${ev.map(e => escapeHtml(e.title) + (e.t ? ' ' + paT12(e.t) : '')).join(', ')}</li>`); }
+            return out.length ? 'Intha week plan:<ul>' + out.join('') + '</ul>' : 'Intha week romba free-a irukku boss.';
+        }
+        function paMoneyText() {
+            const s = paMonthMoney(), over = (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && daysFrom(b.next_due) < 0);
+            return `Intha month numbers:<br>${aiStat('fa-arrow-trend-up', 'Income ' + paMoney(s.inc))} ${aiStat('fa-arrow-trend-down', 'Expenses ' + paMoney(s.exp))} ${aiStat('fa-scale-balanced', (s.net >= 0 ? 'Profit ' : 'Loss ') + paMoney(Math.abs(s.net)))}` + (over.length ? `<br> ${over.length} bill overdue-a irukku, paathukalaam.` : '') + (s.net < 0 ? '<br>Expenses konjam jaasthi aagiduchu boss, watch pannunga.' : '<br>Looks healthy');
+        }
+        function paProjects() {
+            const P = (typeof fzProjects !== 'undefined' ? fzProjects : []).filter(p => !/cancel|complete|invoice/i.test(p.status || '')).sort((a, b) => String(a.due_date || '9').localeCompare(String(b.due_date || '9')));
+            if (!P.length) return 'Active project edhuvum illa boss.';
+            return `${P.length} active project${P.length > 1 ? 's' : ''}:<ul>${P.slice(0, 5).map(p => { const d = p.due_date ? daysFrom(p.due_date) : null; return `<li><strong>${escapeHtml(p.name)}</strong>${p.client ? ' (' + escapeHtml(p.client) + ')' : ''} — ${d === null ? 'no due date' : d < 0 ? '<span style="color:#EE5D50">' + (-d) + ' day late</span>' : d === 0 ? 'due today' : d + ' days left'}</li>`; }).join('')}</ul>`;
+        }
+        function paBrief() {
+            const h = new Date().getHours(), nx = paNextMeeting(), td = paEvents(todayISO()), bills = td.filter(e => e.k === 'bill'), s = paMonthMoney();
+            const over = (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && daysFrom(b.next_due) < 0).length;
+            let t = `${h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'} boss! `;
+            t += td.filter(e => e.k === 'meet' && !e.done).length ? `Innaiku ${td.filter(e => e.k === 'meet' && !e.done).length} meeting irukku` + (nx ? `, next one <strong>${escapeHtml(nx.m.title)}</strong> ${paT12(nx.m.meeting_time)}-ku (${paIn((nx.d - new Date()) / 60000)} la).` : '.') : 'Innaiku meeting edhuvum illa.';
+            t += bills.length ? `<br> ${bills.length} bill due today.` : ''; t += over ? `<br> ${over} overdue bill.` : '';
+            t += `<br>${aiStat('fa-arrow-trend-up', 'Income ' + paMoney(s.inc))} ${aiStat('fa-arrow-trend-down', 'Spent ' + paMoney(s.exp))}<br>Enna help venum? Meeting book panna, expense add panna, edhuvum sollunga.`; return t;
+        }
+        function paHelp() {
+            return `Naan unga PA boss. Idhellam pannuven:<ul><li><strong>Meeting / reminder</strong>: "meeting with Ravi tomorrow 4pm", "meeting with Ravi next monday 11am", "friday 5pm call with Suresh", "remind me to pay wifi bill on 5 dec"</li><li><strong>Cancel</strong>: "cancel the meeting with Ravi today 4pm"</li><li><strong>Expense / income</strong>: "spent 450 on petrol", "received 5000 from Kumar"</li><li><strong>Project note</strong>: "note: Noor ERP, customer Noor Safra, path D:\\Projects\\noor, github github.com/me/noor". Apram "noor path" nu kettaa path varum, Copy button-oda</li><li><strong>Ask</strong>: "today plan", "this week", "next meeting", "this month money", "project notes"</li></ul>Ellam Undo button-oda, thappa pona fix pannalam.`;
+        }
+        /* ---- project notes: where each project lives (folder, GitHub, customer). Saved in the Notes module, category "Project" ---- */
+        const PA_NOTE_STOP = new Set(['where','whats','what','is','are','the','a','an','my','me','of','for','to','in','on','at','and','enga','engae','irukku','irukkum','iruku','project','projects','path','paths','github','repo','repos','folder','folders','note','notes','show','list','all','tell','sollu','solunga','soluga','customer','client','link','location','code','save','add','new','details','detail','pathi','kaattu','kaatu','kudu','kudunga','venum','give','get','copy','please','pls','url','git','epdi','ethu','yedhu','which','name']);
+        const paNorm = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        function paNoteTokens(q) { return q.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w.length > 1 && !PA_NOTE_STOP.has(w)); }
+        function paLev(a, b) { if (Math.abs(a.length - b.length) > 1) return 9; const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
+        const paFolder = p => String(p || '').replace(/[\\\/]+$/, '').split(/[\\\/]/).pop() || '';
+        const paRepo = g => { const m = String(g || '').match(/github\.com\/[^\/\s]+\/([^\/\s?#]+)/i); return m ? m[1].replace(/\.git$/, '') : ''; };
+        const paNoteField = (n, k) => { const m = String(n.body || '').match(new RegExp('^' + k + ':\\s*(.+)$', 'mi')); return m ? m[1].trim() : ''; };
+        const paTitleCase = x => String(x).replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        function paNoteTitle(n) { const t = String(n.title || ''); if (t && !/^project note$/i.test(t)) return t; const f = paFolder(paNoteField(n, 'Path')) || paRepo(paNoteField(n, 'GitHub')); return f ? paTitleCase(f) : (t || 'Project note'); }
+        function paNoteHits(q, strict) {
+            const all = (moduleCache.notes || []).filter(n => n.category === 'Project'), tk = paNoteTokens(q);
+            if (!tk.length) return strict ? [] : all;
+            const sc = all.map(n => {
+                const path = paNoteField(n, 'Path'), git = paNoteField(n, 'GitHub'), head = [paNoteTitle(n), n.related, paFolder(path), paRepo(git)].join(' '), hay = paNorm(head + ' ' + n.body), words = head.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length >= 4);
+                let s2 = 0; tk.forEach(w => { if (hay.includes(w)) s2 += 2; else if (w.length >= 4 && words.some(x => paLev(x, w) <= 1)) s2 += 1; });
+                const j = tk.join(''); if (j.length >= 4 && hay.includes(j)) s2 += 2; return { n, s: s2 };
+            }).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+            if (!sc.length || (strict && sc[0].s < 2)) return [];
+            return sc.filter(x => x.s === sc[0].s).map(x => x.n);
+        }
+        function paNoteParse(raw) {
+            let s = raw.replace(/^\s*(save |add |new )?(project |path )?(note|remember)( panni(ko|dunga)?| pannu| pannunga)?\s*[:\-,]?\s*/i, '').trim();
+            const f = {}, re = /\b(project|customer|client|path|folder|github|repo|note)\s*[:=]\s*/gi, hits = []; let m;
+            while ((m = re.exec(s))) hits.push({ k: m[1].toLowerCase(), i: m.index, e: re.lastIndex });
+            hits.forEach((h, n) => { const v = s.slice(h.e, n + 1 < hits.length ? hits[n + 1].i : s.length).replace(/[\s,;|]+$/, '').trim(); const k = h.k === 'client' ? 'customer' : h.k === 'folder' ? 'path' : h.k === 'repo' ? 'github' : h.k; if (v && !f[k]) f[k] = v; });
+            if (!f.github) { const g = s.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/[^\s,;|]+/i); if (g) f.github = g[0].replace(/[.)]+$/, ''); }
+            if (!f.path) { const p = s.match(/[A-Za-z]:\\[^,;|\n]*?(?=\s+(?:github|customer|client|for|project|note|pushed|push)\b|[,;|\n]|$)/i) || s.match(/(?:^|\s)((?:~|\.)?\/[\w.\-]+(?:\/[\w.\-]+)*)/); if (p) f.path = (p[1] || p[0]).trim(); }
+            if (!f.customer) { const c = s.match(/\b(?:customer|client|for)\s+([A-Za-z0-9 .&']+?)(?=\s+(?:path|github|folder|repo|project|note|is|in|at)\b|[,;|\n]|$)/i); if (c) f.customer = c[1].trim(); }
+            if (!f.project) {
+                let p = s; [f.github, f.path, f.customer].filter(Boolean).forEach(x => { p = p.replace(x, ' '); });
+                p = p.replace(/\b(project|customer|client|path|folder|github|repo|note|for|is|in|at|pushed|push|panni|pannen|la|ku)\b\s*[:=]?/gi, ' ').replace(/[,;|:=\-]+/g, ' ').replace(/\s+/g, ' ').trim();
+                if (p && p.length <= 60) f.project = p;
+            }
+            if (!f.project) { const nm = paFolder(f.path) || paRepo(f.github); if (nm) f.project = nm; }
+            f.raw = s; return f;
+        }
+        async function paNoteSave(raw) {
+            const f = paNoteParse(raw);
+            if (!f.path && !f.github && !f.note && !f.customer) return 'Project name, path, GitHub link, customer - edhavadhu sollunga boss. Example: <em>"note: Noor ERP, customer Noor Safra, path D:\\Projects\\noor, github github.com/me/noor-erp"</em>';
+            const title = paTitleCase(f.project || f.customer || 'Project note');
+            const body = [f.customer ? 'Customer: ' + f.customer : '', f.path ? 'Path: ' + f.path : '', f.github ? 'GitHub: ' + f.github : '', f.note ? 'Note: ' + f.note : ''].filter(Boolean).join('\n');
+            const row = { title, category: 'Project', related: f.customer || title, body };
+            await loadModule('notes');
+            const old = (moduleCache.notes || []).find(n => n.category === 'Project' && paNorm(paNoteTitle(n)) === paNorm(title));
+            const r = old ? await sb.from('notes').update(row).eq('id', old.id).select().single() : await sb.from('notes').insert(row).select().single();
+            if (r.error) return `Aiyo, note save panna mudiyala boss: ${escapeHtml(r.error.message)}`;
+            if (!old) PA.last = { table: 'notes', id: r.data.id };
+            paReload(['notes']);
+            return `${paPick(['Noted boss.', 'Seri, note panniten.', 'Saved.'])} ${old ? 'Updated' : 'Saved'}: <strong>${escapeHtml(title)}</strong>${paNoteLines(row)}${old ? '' : ` <button class="pa-undo" onclick="paUndo('notes','${r.data.id}',this)">Undo</button>`}`;
+        }
+        function paNoteLines(n, want) {
+            return String(n.body || '').split('\n').filter(Boolean).map(l => {
+                const i = l.indexOf(':'), k = i > -1 ? l.slice(0, i) : '', v = i > -1 ? l.slice(i + 1).trim() : l;
+                if (want === 'path' && k !== 'Path') return ''; if (want === 'git' && k !== 'GitHub') return '';
+                if (k === 'GitHub') return `<br>GitHub: <a href="${escapeHtml(/^http/i.test(v) ? v : 'https://' + v)}" target="_blank" rel="noopener">${escapeHtml(v)}</a><button class="pa-copy" data-copy="${escapeHtml(/^http/i.test(v) ? v : 'https://' + v)}"><i class="fa-regular fa-copy"></i> Copy link</button>`;
+                if (k === 'Path') return `<br>Path:<code>${escapeHtml(v)}</code><button class="pa-copy" data-copy="${escapeHtml(v)}"><i class="fa-regular fa-copy"></i> Copy path</button>`;
+                if (k === 'Customer') return `<br>Customer: <strong>${escapeHtml(v)}</strong>`;
+                return `<br>${escapeHtml(l)}`;
+            }).join('');
+        }
+        function paNoteReply(hit, q) {
+            const wantPath = /\b(paths?|folders?|location|directory)\b/.test(q), wantGit = /\b(github|git|repo|repos|link|url)\b/.test(q), want = wantPath && !wantGit ? 'path' : wantGit && !wantPath ? 'git' : '';
+            const one = hit.length === 1, rows = hit.slice(0, 8).map(n => { const ln = paNoteLines(n, want); return `<div class="pa-note"><strong>${escapeHtml(paNoteTitle(n))}</strong>${ln || '<br>' + (want === 'path' ? 'Path save pannala boss.' : 'GitHub link save pannala boss.')}</div>`; }).join('');
+            return (one ? 'Idhu thaan boss:' : `${hit.length} project notes:`) + rows + (hit.length > 8 ? `<small>+${hit.length - 8} more, Notes page-la paarunga</small>` : '');
+        }
+        async function paNoteFind(q) {
+            await loadModule('notes');
+            const all = (moduleCache.notes || []).filter(n => n.category === 'Project'), tk = paNoteTokens(q);
+            if (!all.length) return 'Innum project note edhuvum illa boss. Sollunga: <em>"note: Noor ERP, customer Noor Safra, path D:\\Projects\\noor, github github.com/me/noor"</em>';
+            const hit = paNoteHits(q);
+            if (!hit.length) return `"${escapeHtml(tk.join(' '))}" pathi note edhuvum illa boss. Add panna: <em>"note: ${escapeHtml(tk.join(' '))}, path ..., github ..."</em>`;
+            return paNoteReply(hit, q);
+        }
+        document.addEventListener('click', e => {
+            const b = e.target.closest && e.target.closest('.pa-copy'); if (!b) return;
+            const txt = b.dataset.copy || '', orig = b.innerHTML;
+            const done = () => { b.classList.add('ok'); b.innerHTML = '<i class="fa-solid fa-check"></i> Copied'; setTimeout(() => { b.classList.remove('ok'); b.innerHTML = orig; }, 1600); };
+            const legacy = () => { const t = document.createElement('textarea'); t.value = txt; t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (er) {} t.remove(); done(); };
+            if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done).catch(legacy); else legacy();
+        });
+        /* ---- cancel a meeting/reminder by chat: "cancel the meeting with noor safra today 8pm" ---- */
+        const PA_CANCEL_STOP = new Set(['cancel','canceled','cancelled','the','a','an','my','me','please','pls','can','you','meeting','meetings','meet','with','reminder','appointment','call','delete','remove','drop','at','on','for','to','pannu','pannunga','pannidunga','panni','today','tomorrow','innaiku','naalaikku','naalaiku','and','is','it','next','this','week','please']);
+        async function paCancelChat(raw) {
+            const q = raw.toLowerCase(), d = paParseDate(q), tm = paParseTime(q);
+            const rest = paStrip(q, d && d.hit, tm && tm.hit);
+            const norm = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const tk = rest.replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w && !PA_CANCEL_STOP.has(w)).map(norm).filter(Boolean);
+            if (!tk.length && !d && !tm) return 'Edha cancel pannanum boss? Example: <em>"cancel the meeting with Ravi today 4pm"</em>';
+            await loadModule('meetings');
+            const m = (moduleCache.meetings || []).filter(x => x.status === 'Scheduled' && (!d || x.meeting_date === d.iso) && (!tm || String(x.meeting_time || '').slice(0, 5) === tm.t) && (!d && !tm ? x.meeting_date >= todayISO() : true) && tk.every(w => norm(x.title + x.with_whom + x.place).includes(w)));
+            if (!m.length) return `Antha mathiri scheduled meeting edhuvum illa boss${d ? ' (' + paDayName(d.iso) + ')' : ''}. Calendar-la check pannunga.`;
+            if (m.length > 1 && !tm) return `${m.length} meetings match aagudhu, edha cancel pannanum?<ul>${m.slice(0, 6).map(x => `<li><strong>${escapeHtml(x.title)}</strong> — ${paDayName(x.meeting_date)} ${paT12(x.meeting_time)}${x.with_whom ? ' with ' + escapeHtml(x.with_whom) : ''} <button class="pa-undo" onclick="paCancel('${x.id}')">Cancel</button></li>`).join('')}</ul>`;
+            const ids = m.map(x => x.id), u = await sb.from('meetings').update({ status: 'Cancelled' }).in('id', ids);
+            if (u.error) return `Cancel panna mudiyala boss: ${escapeHtml(u.error.message)}`;
+            paReload(['meetings']);
+            return `${paPick(['Cancelled boss', 'Seri, cancel pannitten'])} ${m.map(x => `<strong>${escapeHtml(x.title)}</strong> (${paDayName(x.meeting_date)} ${paT12(x.meeting_time)})`).join(', ')}. <button class="pa-undo" onclick="paUncancel('${ids.join(',')}',this)">Undo</button>`;
+        }
+        async function paUncancel(ids, btn) {
+            const u = await sb.from('meetings').update({ status: 'Scheduled' }).in('id', ids.split(',')); if (btn) btn.remove();
+            if (u.error) { paSay('Undo panna mudiyala: ' + escapeHtml(u.error.message)); return; }
+            paReload(['meetings']); paSay('Meeting thirumba schedule pannitten');
+        }
+        function paFix(s) {
+            return String(s)
+                .replace(/\b(?:tomm?or+ow|tommorow|tmorow|tomorow|tmrw|tmr|2moro)\b/gi, 'tomorrow')
+                .replace(/\b(?:meetng|metting|meting|meetting|meating|meetin|mting)(s?)\b/gi, 'meeting$1')
+                .replace(/\b(?:remainder|remaindar|reminer|remindr|remainer)(s?)\b/gi, 'reminder$1')
+                .replace(/\b(?:cancle|cancell|canecl|cancl|cansel)(ed|led)?\b/gi, 'cancel')
+                .replace(/\bnxt\b/gi, 'next').replace(/\bwk\b/gi, 'week').replace(/\bevng\b/gi, 'evening').replace(/\bmrng\b/gi, 'morning').replace(/\bappoinment\b/gi, 'appointment');
+        }
+        async function paAnswer(orig) {
+            const raw = paFix(orig), q = raw.toLowerCase().trim();
+            if (/^(hi|hii|hello|hey|vanakkam|good (morning|afternoon|evening))\b/.test(q)) return paBrief();
+            if (/^(thanks|thank you|thx|nandri|super|ok thanks)/.test(q)) return paPick(['Anytime boss', 'Idhu en velai boss!', 'Welcome! Vera edhavadhu venuma?']);
+            if (/what can you do|help|enna pannuva|yenna panna/.test(q)) return paHelp();
+            if (/^\s*(please |pls |can you )?(cancel|delete|remove)\b|\bcancel (the |my )?(meeting|reminder|appointment|call)\b|\b(meeting|reminder|appointment)\b.*\bcancel\b/.test(q)) return paCancelChat(raw);
+            const noteSave = /^\s*(save |add |new )?(project |path )?(note|remember)\b/.test(q) || (/github\.com\/|\b[a-z]:\\/i.test(orig) && !/\?$/.test(q) && !/^(where|enga|what|show|which)\b/.test(q));
+            if (noteSave) return paNoteSave(orig);
+            const noteFind = /\b(paths?|github|repos?|folders?)\b|project notes?|^notes?\b|enga (irukku|vachen|vechen|push)|where (is|did i|are)/.test(q) && !/\b(meeting|bill|expense|income)\b/.test(q);
+            if (noteFind && (/\b(paths?|github|repos?|folders?|notes?)\b/.test(q) || paNoteTokens(q).length)) return paNoteFind(q);
+            if (/\b(reschedule|postpone|prepone)\b|\b(move|shift|change)\b.*\b(meeting|reminder|appointment)\b/.test(q)) return 'Reschedule option innum illa boss. Antha meeting-a <em>"cancel the meeting with Ravi today 4pm"</em> nu cancel pannitu, pudhusa set pannunga.';
+            const hasQ = /^(what|when|show|list|how|which|do i|is there|enna|eppo|evlo|yaar|any)\b|\?$|next meeting|plan|schedule\b|agenda/.test(q);
+            const verbRe = /^\W*(?:(?:please|pls|can you|could you|kindly)\s+)*(?:add|set|book|arrange|create|fix|put|remind)\b|\bremind me\b|^\W*schedule\b.*\b(?:meeting|call|appointment|with)\b|\b(?:set|book|add|fix|arrange|create)\b.*\b(?:meeting|reminder|call|appointment)\b|\breminders?\b.*\b(?:at|on|for|to|tomorrow|today|tonight|next)\b/;
+            const isQuestion = /^\W*(?:what|when|show|list|how|which|tell|check|do i|is there|any|enna|eppo|evlo|yaar)\b|\?\s*$/.test(q);
+            const askRe = /\b(?:irukka|iruka|irukkaa|irukku|irukkum|plan|agenda)\b|\bmeetings\b/;
+            if (!isQuestion && (verbRe.test(q) || (/\b(?:meeting|meet|call|appointment|visit|demo)\b/.test(q) && (paParseDate(q) || paParseTime(q)) && !askRe.test(q)))) return paCreateMeeting(raw);
+            const money = /(spent|spend|paid|expense|selavu|kharch|bought|recharge)/.test(q), inc = /(received|got paid|credited|income|payment (from|received)|vandhuchu|earned)/.test(q);
+            if (paAmount(q.replace(/\b\d{1,2}(?::\d{2})?\s*(am|pm)\b/g, ' ')) && !hasQ) { if (inc) return paCreateMoney(raw, true); if (money) return paCreateMoney(raw, false); }
+            if (/next meeting|next appointment|adutha meeting/.test(q)) { const n = paNextMeeting(); return n ? `Adutha meeting: <strong>${escapeHtml(n.m.title)}</strong> — ${paDayName(n.m.meeting_date)} ${paT12(n.m.meeting_time)}${n.m.with_whom ? ' with ' + escapeHtml(n.m.with_whom) : ''}. ${paIn((n.d - new Date()) / 60000)} la start aagum.` : 'Adutha meeting edhuvum schedule aagala boss.'; }
+            if (/this week|week plan|intha vaaram/.test(q)) return paWeek();
+            if (/tomorrow|naalaikku|naalaiku/.test(q) && /plan|schedule|meeting|agenda|what|enna/.test(q)) return paAgenda(addDays(todayISO(), 1), 'Naalaikku');
+            if (/today|innaiku|inniku|plan|agenda|schedule|meetings?/.test(q) && !/month/.test(q)) return paAgenda(todayISO(), 'Innaiku');
+            if (/projects?|deadline/.test(q)) return paProjects();
+            if (/month|money|income|profit|loss|balance|spent|expenses?|earn|panam/.test(q)) return paMoneyText();
+            if (/bills?|due|overdue|alerts?|attention|pending|reminders?/.test(q)) { const a = typeof getAlerts === 'function' ? getAlerts() : []; return a.length ? `${a.length} things-ku attention venum:<ul>${a.slice(0, 6).map(x => `<li><strong>${escapeHtml(x.title)}</strong> — ${escapeHtml(x.sub)}</li>`).join('')}</ul>` : 'Ellam clear boss, urgent-a edhuvum illa'; }
+            if (/brief|summary|status/.test(q)) return paBrief();
+            const nh = paNoteHits(q, true); if (nh.length) return paNoteReply(nh, q);
+            return paPick(['Hmm, adhu konjam purila boss ', 'Sorry boss, sariya puriyala. ']) + 'Try: <em>"meeting with Ravi tomorrow 4pm"</em>, <em>"spent 300 on lunch"</em> or <em>"today plan"</em>.';
+        }
+
+        let paBusy = false;
+        async function paSend(text) {
+            const input = document.getElementById('paInput'), q = (text || input.value).trim(); if (!q || paBusy) return;
+            paBusy = true; input.value = ''; addPaMsg(escapeHtml(q), 'user'); const row = paTyping(), t0 = Date.now(); let html;
+            try { await aiRefresh(); html = await paAnswer(q); } catch (e) { console.error(e); html = 'Oops boss, edho thappaagiduchu: ' + escapeHtml(e.message || 'unknown'); }
+            const w = 850 - (Date.now() - t0); if (w > 0) await new Promise(r => setTimeout(r, w));
+            clearInterval(row._iv); row.remove(); addPaMsg(html, 'bot'); paBusy = false; input.focus();
+        }
+
+        /* ---- proactive nudges + boot ---- */
+        function paNudge() {
+            const now = new Date();
+            (moduleCache.meetings || []).filter(m => m.status === 'Scheduled').forEach(m => {
+                const d = paStart(m); if (!d) return; const mins = (d - now) / 60000, key = 'n' + m.id + m.meeting_date + m.meeting_time;
+                if (mins > 0 && mins <= 15 && !PA.nudged.has(key)) { PA.nudged.add(key); paSay(` Boss, <strong>${escapeHtml(m.title)}</strong> ${Math.round(mins)} min la start aagudhu${m.with_whom ? ' (with ' + escapeHtml(m.with_whom) + ')' : ''}. Ready-a?`); }
+            });
+        }
+        async function paOpen() {
+            if (!PA.ready) {
+                PA.ready = true; PA.month = parseISO(todayISO()); PA.month.setDate(1); PA.sel = todayISO();
+                document.getElementById('paCalGrid').addEventListener('click', e => { const c = e.target.closest('.pa-c'); if (!c) return; PA.sel = c.dataset.d; paRenderCal(); paRenderDay(); });
+                document.getElementById('paPrev').onclick = () => { PA.month.setMonth(PA.month.getMonth() - 1); paRenderCal(); };
+                document.getElementById('paNextM').onclick = () => { PA.month.setMonth(PA.month.getMonth() + 1); paRenderCal(); };
+                document.getElementById('paSend').onclick = () => paSend();
+                document.getElementById('paInput').addEventListener('keydown', e => { if (e.key === 'Enter') paSend(); });
+                document.getElementById('paChips').addEventListener('click', e => { const c = e.target.closest('.ai-chip'); if (c) paSend(c.dataset.q); });
+                document.querySelectorAll('.pa-tabs button').forEach(b => b.onclick = () => { document.querySelectorAll('.pa-tabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('pa').classList.toggle('pa-show-chat', b.dataset.t === 'chat'); });
+                setInterval(() => { paTickClock(); if (document.getElementById('pa').classList.contains('active')) { paRenderNext(); paNudge(); } }, 30000);
+                paClockLoop();
+            }
+            paTickClock();
+            try { await aiRefresh(true); } catch (e) {}
+            paRenderAll();
+            if (!PA.briefed) { PA.briefed = true; setTimeout(() => paSay(paBrief()), 400); }
+        }
+        let paWasOn = false;
+        new MutationObserver(() => { const on = document.getElementById('pa').classList.contains('active'); if (on && !paWasOn) paOpen(); paWasOn = on; }).observe(document.getElementById('pa'), { attributes: true, attributeFilter: ['class'] });
+
 
         /* ----------------------------------------------------
            18. GLOBAL SEARCH SHORTCUT (Ctrl/Cmd + K)
