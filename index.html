@@ -1479,6 +1479,78 @@
         @media (max-width:1000px){.pa-grid{grid-template-columns:minmax(0,1fr)}.pa-tabs{display:flex}.pa-chat-col{display:none;position:static}#pa.pa-show-chat .pa-chat-col{display:block}#pa.pa-show-chat .pa-plan-col{display:none}
             .pa-chat-card.glass-card{height:calc(var(--vvh,100dvh) - 230px)}.pa-two{grid-template-columns:1fr}.pa-clock b{font-size:1.15rem}}
         @media (max-width:480px){#pa .pa-hero{padding:.9rem 1rem;gap:.6rem}.pa-av{width:40px;height:40px;font-size:1rem}.pa-hero h2{font-size:1.05rem}.pa-clock b{font-size:1.05rem}.pa-clock span{font-size:.7rem}.pa-chat-card .ai-chat-body{padding:.7rem}}
+
+        /* ===== Maintenance (AMC) + Project Folders ===== */
+        .mnt-bar{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center;margin:0 0 1.1rem}
+        .mnt-search{flex:1 1 220px;min-width:180px;padding:.7rem 1rem;border-radius:12px;border:1px solid var(--border);background:var(--bg-base);color:var(--text-main);font:inherit;font-size:.88rem;outline:none}
+        .mnt-search:focus{border-color:var(--primary)}
+        .mnt-select{padding:.65rem .9rem;border-radius:12px;border:1px solid var(--border);background:var(--bg-base);color:var(--text-main);font:inherit;font-size:.85rem;max-width:260px}
+        .mnt-chips{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.1rem}
+        .mnt-chip{border:1px solid var(--border);background:transparent;color:var(--text-muted);padding:.42rem .85rem;border-radius:999px;font:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s}
+        .mnt-chip b{margin-left:.4rem;font-weight:700;opacity:.8}
+        .mnt-chip:hover{border-color:var(--primary);color:var(--primary)}
+        .mnt-chip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .mnt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.1rem;margin-bottom:1.4rem}
+        .mnt-card{--t:#1E6BFF;--tr:30,107,255;position:relative;padding:1.15rem 1.2rem 1rem;border-left:4px solid var(--t);overflow:hidden}
+        .mnt-card.red{--t:#EE5D50;--tr:238,93,80}
+        .mnt-card.amber{--t:#FFB100;--tr:255,177,0}
+        .mnt-card.green{--t:#05CD99;--tr:5,205,153}
+        .mnt-card.grey{--t:#8792B3;--tr:135,146,179}
+        .mnt-card.blue{--t:#1E6BFF;--tr:30,107,255}
+        .mnt-card h4{margin:0;font-size:1rem}
+        .mnt-sub{color:var(--text-muted);font-size:.78rem;margin-top:.15rem}
+        .mnt-top{display:flex;justify-content:space-between;gap:.6rem;align-items:flex-start}
+        .mnt-pill{display:inline-block;padding:.22rem .65rem;border-radius:999px;font-size:.7rem;font-weight:700;white-space:nowrap;background:rgba(var(--tr),.16);color:var(--t)}
+        .mnt-amt{font-size:1.45rem;font-weight:800;margin:.7rem 0 .1rem}
+        .mnt-amt small{font-size:.75rem;font-weight:600;color:var(--text-muted)}
+        .mnt-meta{display:grid;grid-template-columns:1fr 1fr;gap:.55rem .8rem;font-size:.8rem;margin:.6rem 0}
+        .mnt-meta span{color:var(--text-muted);display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.1rem}
+        .mnt-meta b{font-weight:600;word-break:break-word}
+        .mnt-prog{height:6px;border-radius:99px;background:var(--border);overflow:hidden;margin:.55rem 0 .2rem}
+        .mnt-prog i{display:block;height:100%;background:var(--t);border-radius:99px}
+        .mnt-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.85rem}
+        .mnt-btns button{border:1px solid var(--border);background:transparent;color:var(--text-main);border-radius:10px;padding:.42rem .7rem;font:inherit;font-size:.76rem;cursor:pointer;display:inline-flex;gap:.35rem;align-items:center}
+        .mnt-btns button:hover{border-color:var(--primary);color:var(--primary)}
+        .mnt-btns button.main{background:var(--primary);border-color:var(--primary);color:#fff}
+        .mnt-btns button.main:hover{color:#fff;filter:brightness(1.08)}
+        .mnt-btns button.danger:hover{border-color:var(--danger);color:var(--danger)}
+        .mnt-fc{display:flex;gap:.45rem;align-items:stretch;height:160px;padding-top:.3rem}
+        .mnt-fc div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.3rem;min-width:0}
+        .mnt-fc i{display:block;width:100%;max-width:34px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#1E6BFF,rgba(30,107,255,.35));min-height:3px}
+        .mnt-fc div.now i{background:linear-gradient(180deg,#FFB100,rgba(255,177,0,.35))}
+        .mnt-fc small{font-size:.62rem;color:var(--text-muted);white-space:nowrap}
+        .mnt-fc em{font-style:normal;font-size:.62rem;font-weight:700;min-height:.9em}
+        .mnt-empty{grid-column:1/-1;text-align:center;color:var(--text-muted);padding:2rem 1rem}
+        .mnt-ov{position:fixed;inset:0;background:rgba(5,8,20,.58);display:none;align-items:center;justify-content:center;z-index:10000;padding:1rem}
+        .mnt-ov.open{display:flex}
+        .mnt-box{background:var(--bg-base);color:var(--text-main);border:1px solid var(--border);border-radius:20px;padding:1.4rem;width:100%;max-width:460px;max-height:90vh;overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+        .mnt-box h3{margin:0 0 .2rem}
+        .mnt-box label{display:block;font-size:.75rem;font-weight:600;color:var(--text-muted);margin:.7rem 0 .25rem}
+        .mnt-box input,.mnt-box select{width:100%;padding:.65rem .8rem;border-radius:11px;border:1px solid var(--border);background:var(--bg-base);color:var(--text-main);font:inherit;font-size:.88rem;outline:none}
+        .mnt-box input:focus,.mnt-box select:focus{border-color:var(--primary)}
+        .mnt-box .row2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+        .mnt-box .acts{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.1rem;flex-wrap:wrap}
+        .mnt-ghost{border:1px solid var(--border);background:transparent;color:var(--text-main);border-radius:12px;padding:.6rem 1rem;font:inherit;cursor:pointer}
+        .mnt-err{color:var(--danger);font-size:.8rem;min-height:1em;margin-top:.5rem}
+        .mnt-cover{margin-top:.8rem;padding:.65rem .8rem;border-radius:12px;background:rgba(30,107,255,.09);font-size:.8rem;line-height:1.45}
+        .mnt-hist{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:.6rem}
+        .mnt-hist td,.mnt-hist th{padding:.5rem .3rem;border-bottom:1px solid var(--border);text-align:left}
+        .mnt-hist th{color:var(--text-muted);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em}
+        .fol-path{display:flex;align-items:center;gap:.5rem;margin:.65rem 0;padding:.55rem .7rem;border-radius:11px;background:rgba(135,146,179,.12);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.76rem;word-break:break-all;cursor:pointer}
+        .fol-path span{flex:1}
+        .fol-path i{color:var(--primary);flex-shrink:0}
+        .fol-path:hover{background:rgba(30,107,255,.12)}
+        .fol-tags{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.5rem}
+        .fol-tags span{font-size:.68rem;padding:.18rem .55rem;border-radius:99px;background:rgba(135,146,179,.14);color:var(--text-muted)}
+        .fol-note{font-size:.78rem;color:var(--text-muted);margin-top:.5rem;white-space:pre-wrap}
+        .fol-view{display:flex;gap:.3rem}
+        .fol-view button{border:1px solid var(--border);background:transparent;color:var(--text-muted);border-radius:10px;padding:.5rem .8rem;cursor:pointer;font:inherit;font-size:.8rem}
+        .fol-view button.on{background:var(--primary);border-color:var(--primary);color:#fff}
+        .mnt-tablewrap{overflow-x:auto}
+        .mnt-tablewrap .data-table td code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;word-break:break-all}
+        .mnt-link{color:var(--primary);cursor:pointer;text-decoration:none}
+        .mnt-setup{padding:1rem 1.2rem;border-radius:14px;background:rgba(238,93,80,.1);border:1px solid rgba(238,93,80,.3);margin-bottom:1.2rem;font-size:.86rem;line-height:1.5}
+        @media (max-width:560px){.mnt-grid{grid-template-columns:1fr}.mnt-box .row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1662,6 +1734,13 @@
                 <div class="nav-item" data-target="reminders">
                     <span class="nav-icon"><i class="fa-solid fa-bell"></i></span><span>Reminders</span>
                     <span class="nav-badge" id="navBadgeAlerts" style="display:none">0</span>
+                </div>
+                <div class="nav-item" data-target="maintenance">
+                    <span class="nav-icon"><i class="fa-solid fa-screwdriver-wrench"></i></span><span>Maintenance</span>
+                    <span class="nav-badge" id="navBadgeMnt" style="display:none">0</span>
+                </div>
+                <div class="nav-item" data-target="folders">
+                    <span class="nav-icon"><i class="fa-solid fa-folder-tree"></i></span><span>Project Folders</span>
                 </div>
                 <div class="nav-item" data-target="helpdesk">
                     <span class="nav-icon"><i class="fa-solid fa-headset"></i></span><span>Helpdesk</span>
@@ -2191,6 +2270,49 @@
                     <div class="glass-card" style="margin-bottom:1.2rem"><div class="section-title">Needs attention</div><div class="fz-alertfeed"></div></div>
                     <div class="glass-card"><div class="section-title">Meetings</div>
                         <table class="data-table"><thead><tr><th>When</th><th>Meeting</th><th>With</th><th>Place / link</th><th>Alert</th><th>Status</th><th>Actions</th></tr></thead><tbody id="meetings-table-body"></tbody></table></div>
+                </section>
+
+                <section id="maintenance" class="view-section">
+                    <div class="page-header"><div><h2>Maintenance & AMC</h2><p>Yearly and monthly maintenance after delivery: dues, reminders, payments and renewals in one place.</p></div>
+                        <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
+                            <select id="mntFromProject" class="mnt-select" onfocus="mntFillProjects()" onchange="mntNewFromProject(this)"><option value="">+ From a client project…</option></select>
+                            <button class="btn-primary" onclick="openAddModal('maintenance_plans')"><i class="fa-solid fa-plus"></i> New Plan</button>
+                        </div></div>
+                    <div id="mntSetup"></div>
+                    <div class="kpi-grid">
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Active plans</div><div class="kpi-value" id="mntKActive">0</div><div class="mnt-sub" id="mntKActiveSub"></div></div><div class="kpi-icon blue"><i class="fa-solid fa-screwdriver-wrench"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Monthly recurring</div><div class="kpi-value" id="mntKMrr">₹0</div><div class="mnt-sub">All plans, per month</div></div><div class="kpi-icon green"><i class="fa-solid fa-arrows-rotate"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Yearly value</div><div class="kpi-value" id="mntKYear">₹0</div><div class="mnt-sub">If every plan keeps paying</div></div><div class="kpi-icon purple"><i class="fa-solid fa-chart-line"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Due in 30 days</div><div class="kpi-value" id="mntKDue">₹0</div><div class="mnt-sub" id="mntKDueSub"></div></div><div class="kpi-icon orange"><i class="fa-solid fa-hourglass-half"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Overdue</div><div class="kpi-value" id="mntKOver">₹0</div><div class="mnt-sub" id="mntKOverSub"></div></div><div class="kpi-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Collected this year</div><div class="kpi-value" id="mntKColl">₹0</div><div class="mnt-sub">Maintenance payments</div></div><div class="kpi-icon green"><i class="fa-solid fa-sack-dollar"></i></div></div></div>
+                    </div>
+                    <div class="glass-card" id="mntForecast" style="margin-bottom:1.2rem"></div>
+                    <div class="mnt-bar"><input id="mntSearch" class="mnt-search" placeholder="Search client, project or notes..." oninput="MNT.q=this.value;renderMaintenance()"></div>
+                    <div class="mnt-chips" id="mntChips"></div>
+                    <div class="mnt-grid" id="mntGrid"></div>
+                    <div class="glass-card"><div class="section-title">Recent maintenance payments</div>
+                        <div class="mnt-tablewrap"><table class="data-table"><thead><tr><th>Paid on</th><th>Client</th><th>Period covered</th><th>Mode</th><th>Amount</th></tr></thead><tbody id="mntPayBody"></tbody></table></div></div>
+                </section>
+
+                <section id="folders" class="view-section">
+                    <div class="page-header"><div><h2>Project Folders</h2><p>Where every project lives: folder path, laptop or drive, live site, repo, backup and maintenance status.</p></div>
+                        <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;">
+                            <select id="folFromProject" class="mnt-select" onfocus="folFillProjects()" onchange="folNewFromProject(this)"><option value="">+ From a client project…</option></select>
+                            <button class="btn-primary" onclick="openAddModal('project_folders')"><i class="fa-solid fa-plus"></i> Add Project Folder</button>
+                        </div></div>
+                    <div id="folSetup"></div>
+                    <div class="kpi-grid">
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Projects noted</div><div class="kpi-value" id="folKTotal">0</div><div class="mnt-sub" id="folKTotalSub"></div></div><div class="kpi-icon blue"><i class="fa-solid fa-folder-tree"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Live websites</div><div class="kpi-value" id="folKLive">0</div><div class="mnt-sub">With a live link saved</div></div><div class="kpi-icon green"><i class="fa-solid fa-globe"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Under maintenance</div><div class="kpi-value" id="folKAmc">0</div><div class="mnt-sub">Matched with a plan</div></div><div class="kpi-icon purple"><i class="fa-solid fa-screwdriver-wrench"></i></div></div></div>
+                        <div class="glass-card kpi-card"><div class="kpi-header"><div><div class="kpi-title">Backup needed</div><div class="kpi-value" id="folKBackup">0</div><div class="mnt-sub">No backup or older than 30 days</div></div><div class="kpi-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div></div></div>
+                    </div>
+                    <div class="mnt-bar"><input id="folSearch" class="mnt-search" placeholder="Search project, client, folder path, tech..." oninput="FOL.q=this.value;renderFolders()">
+                        <div class="fol-view"><button data-folview="cards" class="on"><i class="fa-solid fa-table-cells-large"></i> Cards</button><button data-folview="table"><i class="fa-solid fa-table-list"></i> Overview</button></div></div>
+                    <div class="mnt-chips" id="folChips"></div>
+                    <div class="mnt-grid" id="folGrid"></div>
+                    <div class="glass-card mnt-tablewrap" id="folTableBox" style="display:none"></div>
                 </section>
 
                 <section id="helpdesk" class="view-section">
@@ -3130,6 +3252,53 @@
                 },
                 sync(data) { data.sort((a, b) => (String(a.meeting_date) + String(a.meeting_time)).localeCompare(String(b.meeting_date) + String(b.meeting_time))); refreshAlerts(); }
             },
+            maintenance_plans: {
+                table: 'maintenance_plans', tbody: 'mnt-table-body', colCount: 1, customRender: true,
+                fields: [
+                    { key: 'client', label: 'Client name', type: 'text', required: true, placeholder: 'e.g. Noor Safra' },
+                    { key: 'project_name', label: 'Project', type: 'text', placeholder: 'e.g. Noor Safra ERP / CRM' },
+                    { key: 'whatsapp', label: 'Client WhatsApp number', type: 'text', placeholder: '10-digit number, for reminders and receipts' },
+                    { key: 'plan_type', label: 'Maintenance plan', type: 'select', options: ['Monthly', 'Quarterly', 'Half-Yearly', 'Yearly'], default: () => 'Yearly' },
+                    { key: 'amount', label: 'Maintenance charge per cycle (₹)', type: 'number', required: true },
+                    { key: 'next_due', label: 'First / next due date (when charging starts)', type: 'date', required: true, default: () => addMonths(todayISO(), 12) },
+                    { key: 'remind_days', label: 'Remind me this many days before', type: 'number', default: () => 7 },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Paused', 'Ended'], default: () => 'Active' },
+                    { key: 'services', label: 'What is included (hosting, bug fixes, support hours...)', type: 'textarea' },
+                    { key: 'note', label: 'Note', type: 'textarea' }
+                ],
+                prepare(payload, id) { payload.cycle_months = MNT_CYCLE[payload.plan_type] || 12; if (!id) payload.started_on = todayISO(); return ''; },
+                sync() { mntErr = ''; renderMaintenance(); },
+                onError(err) { mntSetupError(err); }
+            },
+            maintenance_payments: {
+                table: 'maintenance_payments', tbody: 'mnt-pay-body', colCount: 1, customRender: true,
+                fields: [
+                    { key: 'paid_on', label: 'Paid on', type: 'date', required: true },
+                    { key: 'amount', label: 'Amount (₹)', type: 'number', required: true },
+                    { key: 'note', label: 'Note', type: 'textarea' }
+                ],
+                sync() { renderMaintenance(); },
+                onError() {}
+            },
+            project_folders: {
+                table: 'project_folders', tbody: 'fol-table-body', colCount: 1, customRender: true,
+                fields: [
+                    { key: 'project_name', label: 'Project name', type: 'text', required: true, placeholder: 'e.g. Noor Safra ERP / CRM' },
+                    { key: 'client', label: 'Client', type: 'text', placeholder: 'e.g. Noor Safra' },
+                    { key: 'status', label: 'Status', type: 'select', options: ['Active', 'Delivered', 'Maintenance', 'On hold', 'Archived'], default: () => 'Active' },
+                    { key: 'location', label: 'Stored on', type: 'select', options: ['Laptop', 'Desktop PC', 'Pen drive / HDD', 'Google Drive', 'GitHub', 'Server / Hosting', 'Other'], default: () => 'Laptop' },
+                    { key: 'device_label', label: 'Which laptop / drive?', type: 'text', placeholder: 'e.g. Lenovo laptop, D: drive' },
+                    { key: 'folder_path', label: 'Folder path', type: 'text', required: true, placeholder: 'e.g. D:\\Projects\\Clients\\noor-safra' },
+                    { key: 'live_url', label: 'Live website link', type: 'text', placeholder: 'e.g. noorsafra.netlify.app' },
+                    { key: 'repo_url', label: 'GitHub / repo link', type: 'text', placeholder: 'e.g. github.com/4bduhh/noor-safra' },
+                    { key: 'tech_stack', label: 'Tech stack (comma separated)', type: 'text', placeholder: 'e.g. HTML, JS, Supabase' },
+                    { key: 'hosting', label: 'Hosting / backend', type: 'text', placeholder: 'e.g. Netlify, Supabase, Render' },
+                    { key: 'last_backup', label: 'Last backup date', type: 'date' },
+                    { key: 'note', label: 'Note', type: 'textarea', placeholder: 'Anything to remember about this project' }
+                ],
+                sync() { folErr = ''; renderFolders(); },
+                onError(err) { folSetupError(err); }
+            },
             tickets: {
                 table: 'tickets', tbody: 'helpdesk-table-body', colCount: 6,
                 fields: [
@@ -3414,7 +3583,8 @@
             const tbody = document.getElementById(mod.tbody);
             const { data, error } = await sb.from(mod.table).select('*').order('created_at', { ascending: false });
             if (error) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="${mod.colCount}">Couldn't load data — ${escapeHtml(error.message)}</td></tr>`;
+                if (mod.onError) mod.onError(error);
+                if (tbody) tbody.innerHTML = `<tr class="empty-row"><td colspan="${mod.colCount}">Couldn't load data — ${escapeHtml(error.message)}</td></tr>`;
                 return;
             }
             moduleCache[key] = data || [];
@@ -4169,6 +4339,7 @@
                 const d = daysFrom(m.meeting_date);
                 if (d >= 0 && d <= 1) out.push({ d: d - 0.5, tone: d === 0 ? 'amber' : 'blue', title: `Meeting: ${m.title}`, sub: `${d === 0 ? 'Today' : 'Tomorrow'} ${m.meeting_time || ''}${m.with_whom ? ' with ' + m.with_whom : ''}`, btn: 'Done', act: `markMeetingDone('${m.id}')` });
             });
+            mntAlerts(out);
             return out.sort((a, b) => a.d - b.d);
         }
         function refreshAlerts() {
@@ -4207,6 +4378,7 @@
         }
         function fzCheckReminders() {
             const now = new Date();
+            mntNotifyCheck();
             (moduleCache.meetings || []).filter(m => m.status === 'Scheduled' && m.meeting_date === todayISO() && m.meeting_time).forEach(m => {
                 const t = parseISO(m.meeting_date); const [h, mi] = String(m.meeting_time).split(':').map(Number); t.setHours(h, mi || 0, 0, 0);
                 const mins = (t - now) / 60000, lead = REMIND_MIN[m.remind_before] || 30;
@@ -4219,6 +4391,404 @@
         }
         setInterval(() => { refreshAlerts(); fzCheckReminders(); }, 60000);
         setTimeout(() => { refreshAlerts(); fzCheckReminders(); }, 4000);
+        /* ====================================================================
+           MAINTENANCE (AMC) + PROJECT FOLDERS
+           Tables: maintenance_plans, maintenance_payments, project_folders
+           (run maintenance-folders-setup.sql once in Supabase)
+           ==================================================================== */
+        const MNT_CYCLE = { 'Monthly': 1, 'Quarterly': 3, 'Half-Yearly': 6, 'Yearly': 12 };
+        const MNT = { filter: 'all', q: '', last: null };
+        const FOL = { view: 'cards', q: '', loc: 'all' };
+        const FOL_ICON = { 'Laptop': 'fa-solid fa-laptop', 'Desktop PC': 'fa-solid fa-desktop', 'Pen drive / HDD': 'fa-solid fa-hard-drive', 'Google Drive': 'fa-brands fa-google-drive', 'GitHub': 'fa-brands fa-github', 'Server / Hosting': 'fa-solid fa-server', 'Other': 'fa-solid fa-folder' };
+        let mntErr = '', folErr = '';
+        const mntEl = id => document.getElementById(id);
+        const mntPlans = () => moduleCache.maintenance_plans || [];
+        const mntPays = () => moduleCache.maintenance_payments || [];
+        const folRows = () => moduleCache.project_folders || [];
+        const mntNorm = s => String(s || '').trim().toLowerCase();
+        const mntD = v => String(v || '').slice(0, 10);
+        function mntK(n) {
+            n = Number(n) || 0;
+            if (n >= 100000) return '₹' + (n / 100000).toFixed(n % 100000 ? 1 : 0) + 'L';
+            if (n >= 1000) return '₹' + Math.round(n / 1000) + 'k';
+            return '₹' + Math.round(n);
+        }
+        function mntCycle(p) { return Number(p.cycle_months) || MNT_CYCLE[p.plan_type] || 12; }
+        function mntUnit(p) { const c = mntCycle(p); return c === 1 ? 'month' : c === 12 ? 'year' : c + ' months'; }
+        function mntStatus(p) {
+            const d = daysFrom(mntD(p.next_due));
+            if (p.status === 'Ended') return { key: 'ended', tone: 'grey', label: 'Ended', d };
+            if (p.status === 'Paused') return { key: 'paused', tone: 'grey', label: 'Paused', d };
+            if (d < 0) return { key: 'overdue', tone: 'red', label: 'Overdue ' + (-d) + (d === -1 ? ' day' : ' days'), d };
+            if (d === 0) return { key: 'due', tone: 'amber', label: 'Due today', d };
+            if (d <= (p.remind_days ?? 7)) return { key: 'due', tone: 'amber', label: 'Due in ' + d + (d === 1 ? ' day' : ' days'), d };
+            if (d <= 30) return { key: 'soon', tone: 'blue', label: 'Due in ' + d + ' days', d };
+            return { key: 'ok', tone: 'green', label: 'Due in ' + d + ' days', d };
+        }
+        function mntPlanFor(r) {
+            const list = mntPlans().filter(p => p.status !== 'Ended');
+            const c = mntNorm(r.client), pr = mntNorm(r.project_name);
+            return list.find(p => c && mntNorm(p.client) === c && pr && mntNorm(p.project_name) === pr)
+                || list.find(p => c && mntNorm(p.client) === c && !mntNorm(p.project_name)) || null;
+        }
+        function mntHasPlanFor(p) { return mntPlans().some(x => mntNorm(x.client) === mntNorm(p.client) && mntNorm(x.project_name) === mntNorm(p.name)); }
+        function mntSetupError(err) { mntErr = (err && err.message) || String(err); renderMaintenance(); }
+        function folSetupError(err) { folErr = (err && err.message) || String(err); renderFolders(); }
+        const MNT_SETUP_HTML = (msg) => `<div class="mnt-setup"><b>This section is not set up yet.</b><br>${escapeHtml(msg)}<br><small style="color:var(--text-muted);">Run <b>maintenance-folders-setup.sql</b> once in the Supabase SQL Editor, then refresh the app.</small></div>`;
+
+        /* ---------- Maintenance: render ---------- */
+        function renderMaintenance() {
+            const box = mntEl('mntGrid'); if (!box) return;
+            const setup = mntEl('mntSetup'); if (setup) setup.innerHTML = mntErr ? MNT_SETUP_HTML(mntErr) : '';
+            const all = mntPlans(), act = all.filter(p => p.status === 'Active');
+            const st = p => mntStatus(p);
+            const sum = l => l.reduce((a, p) => a + (Number(p.amount) || 0), 0);
+            const mrr = act.reduce((a, p) => a + (Number(p.amount) || 0) / mntCycle(p), 0);
+            const over = act.filter(p => st(p).key === 'overdue');
+            const due30 = act.filter(p => { const d = daysFrom(mntD(p.next_due)); return d >= 0 && d <= 30; });
+            const yr = todayISO().slice(0, 4);
+            const coll = mntPays().filter(x => String(x.paid_on).startsWith(yr)).reduce((a, x) => a + (Number(x.amount) || 0), 0);
+            setText('mntKActive', String(act.length)); setText('mntKActiveSub', (all.length - act.length) + ' paused or ended');
+            setText('mntKMrr', fmtMoney(mrr)); setText('mntKYear', fmtMoney(mrr * 12));
+            setText('mntKDue', fmtMoney(sum(due30))); setText('mntKDueSub', due30.length + ' plan(s) in the next 30 days');
+            setText('mntKOver', fmtMoney(sum(over))); setText('mntKOverSub', over.length ? over.length + ' plan(s) overdue' : 'Nothing overdue');
+            setText('mntKColl', fmtMoney(coll));
+            mntForecast(act);
+            const dueNow = act.filter(p => st(p).key === 'due');
+            const badge = mntEl('navBadgeMnt'); if (badge) { const n = over.length + dueNow.length; badge.textContent = n; badge.style.display = n ? '' : 'none'; }
+            const chips = [['all', 'All', all.length], ['overdue', 'Overdue', over.length], ['due', 'Due soon', act.filter(p => { const k = st(p).key; return k === 'due' || k === 'soon'; }).length],
+                ['monthly', 'Monthly', all.filter(p => p.plan_type === 'Monthly').length], ['yearly', 'Yearly', all.filter(p => p.plan_type === 'Yearly').length], ['paused', 'Paused / ended', all.filter(p => p.status !== 'Active').length]];
+            mntEl('mntChips').innerHTML = chips.map(c => `<button class="mnt-chip ${MNT.filter === c[0] ? 'on' : ''}" data-chip="${c[0]}">${c[1]}<b>${c[2]}</b></button>`).join('');
+            const q = mntNorm(MNT.q);
+            const list = all.filter(p => {
+                const k = st(p).key;
+                if (MNT.filter === 'overdue' && k !== 'overdue') return false;
+                if (MNT.filter === 'due' && !(k === 'due' || k === 'soon')) return false;
+                if (MNT.filter === 'monthly' && p.plan_type !== 'Monthly') return false;
+                if (MNT.filter === 'yearly' && p.plan_type !== 'Yearly') return false;
+                if (MNT.filter === 'paused' && p.status === 'Active') return false;
+                return !q || mntNorm([p.client, p.project_name, p.services, p.note].join(' ')).includes(q);
+            });
+            const rank = p => p.status !== 'Active' ? 100000 + st(p).d : st(p).d;
+            list.sort((a, b) => rank(a) - rank(b));
+            box.innerHTML = list.length ? list.map(mntCard).join('')
+                : `<div class="mnt-empty">${all.length ? 'No plans match this filter.' : 'No maintenance plans yet.<br>When a project is delivered, add a yearly or monthly plan here and the reminders, dues and payment history are handled for you.'}</div>`;
+            const byId = {}; all.forEach(p => { byId[p.id] = p; });
+            const pays = mntPays().slice().sort((a, b) => String(b.paid_on).localeCompare(String(a.paid_on))).slice(0, 12);
+            const pb = mntEl('mntPayBody');
+            if (pb) pb.innerHTML = pays.length ? pays.map(x => { const p = byId[x.plan_id] || {}; return `<tr><td>${fmtDate(x.paid_on)}</td><td class="emp-name">${escapeHtml(p.client || '—')}<div class="mnt-sub">${escapeHtml(p.project_name || '')}</div></td><td>${fmtDate(x.period_from)} → ${fmtDate(x.period_to)}</td><td>${escapeHtml(x.mode || '')}</td><td style="font-weight:700;">${fmtMoney(x.amount)}</td></tr>`; }).join('')
+                : '<tr class="empty-row"><td colspan="5">No maintenance payments recorded yet.</td></tr>';
+            mntFillProjects();
+            if (typeof renderFolders === 'function') renderFolders();
+        }
+        function mntCard(p) {
+            const s = mntStatus(p), per = mntCycle(p), active = p.status === 'Active';
+            const pays = mntPays().filter(x => String(x.plan_id) === String(p.id));
+            const paid = pays.reduce((a, x) => a + (Number(x.amount) || 0), 0);
+            const last = pays.slice().sort((a, b) => String(b.paid_on).localeCompare(String(a.paid_on)))[0];
+            const nd = mntD(p.next_due), start = nd ? addMonths(nd, -per) : todayISO();
+            const tot = Math.max(1, (parseISO(nd || todayISO()) - parseISO(start)) / 864e5), el = (parseISO(todayISO()) - parseISO(start)) / 864e5;
+            const pct = Math.max(0, Math.min(100, Math.round(el / tot * 100)));
+            const btns = [
+                active ? `<button class="main" data-mnt="pay" data-id="${p.id}"><i class="fa-solid fa-circle-check"></i> Mark paid</button>` : '',
+                p.whatsapp ? `<button data-mnt="wa" data-id="${p.id}" title="Send payment reminder on WhatsApp"><i class="fa-brands fa-whatsapp" style="color:#25D366"></i> Remind</button>` : '',
+                `<button data-mnt="hist" data-id="${p.id}"><i class="fa-solid fa-clock-rotate-left"></i> History</button>`,
+                p.status === 'Ended' ? '' : `<button data-mnt="toggle" data-id="${p.id}">${active ? '<i class="fa-solid fa-pause"></i> Pause' : '<i class="fa-solid fa-play"></i> Resume'}</button>`,
+                `<button data-mnt="edit" data-id="${p.id}"><i class="fa-solid fa-pen"></i></button>`,
+                `<button class="danger" data-mnt="del" data-id="${p.id}"><i class="fa-solid fa-trash"></i></button>`
+            ].join('');
+            return `<div class="glass-card mnt-card ${s.tone}">
+                <div class="mnt-top"><div><h4>${escapeHtml(p.client)}</h4><div class="mnt-sub">${escapeHtml(p.project_name || 'No project name')}</div></div><span class="mnt-pill">${escapeHtml(s.label)}</span></div>
+                <div class="mnt-amt">${fmtMoney(p.amount)} <small>/ ${mntUnit(p)} · ${escapeHtml(p.plan_type || 'Yearly')}</small></div>
+                ${active ? `<div class="mnt-prog"><i style="width:${pct}%"></i></div><div class="mnt-sub">${pct}% of this cycle used</div>` : ''}
+                <div class="mnt-meta">
+                    <div><span>Next due</span><b>${fmtDate(nd)}</b></div>
+                    <div><span>Last payment</span><b>${last ? fmtDate(last.paid_on) + ' · ' + fmtMoney(last.amount) : 'None yet'}</b></div>
+                    <div><span>Collected so far</span><b>${fmtMoney(paid)}</b></div>
+                    <div><span>Reminder</span><b>${p.remind_days ?? 7} days before</b></div>
+                </div>
+                ${p.services ? `<div class="fol-note">${escapeHtml(p.services)}</div>` : ''}
+                <div class="mnt-btns">${btns}</div></div>`;
+        }
+        function mntForecast(act) {
+            const el = mntEl('mntForecast'); if (!el) return;
+            const base = new Date(), months = [];
+            for (let i = 0; i < 12; i++) { const d = new Date(base.getFullYear(), base.getMonth() + i, 1); months.push({ key: d.getFullYear() + '-' + pad2(d.getMonth() + 1), label: d.toLocaleDateString('en-IN', { month: 'short' }), amt: 0 }); }
+            const idx = {}; months.forEach((m, i) => { idx[m.key] = i; });
+            const today = todayISO(), lastKey = months[11].key;
+            act.forEach(p => {
+                let d = mntD(p.next_due), n = 0; if (!d) return;
+                const per = mntCycle(p);
+                while (n++ < 40) {
+                    if (d.slice(0, 7) > lastKey) break;
+                    const key = d < today ? months[0].key : d.slice(0, 7);
+                    if (idx[key] !== undefined) months[idx[key]].amt += Number(p.amount) || 0;
+                    d = addMonths(d, per);
+                }
+            });
+            const max = Math.max(1, ...months.map(m => m.amt)), total = months.reduce((a, m) => a + m.amt, 0);
+            el.innerHTML = `<div class="section-title" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem;">Expected maintenance income, next 12 months <span style="font-size:.8rem;color:var(--text-muted);font-weight:500;">${fmtMoney(total)} total · overdue amounts sit in this month</span></div>`
+                + `<div class="mnt-fc">${months.map((m, i) => `<div class="${i === 0 ? 'now' : ''}" title="${m.label}: ${fmtMoney(m.amt)}"><em>${m.amt ? mntK(m.amt) : ''}</em><i style="height:${Math.max(3, Math.round(m.amt / max * 68))}%"></i><small>${m.label}</small></div>`).join('')}</div>`;
+        }
+
+        /* ---------- Maintenance: popups (pay, history) ---------- */
+        function mntOverlay() {
+            let ov = mntEl('mntOv');
+            if (!ov) { ov = document.createElement('div'); ov.id = 'mntOv'; ov.className = 'mnt-ov'; document.body.appendChild(ov); ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); }); }
+            return ov;
+        }
+        function mntClose() { const ov = mntEl('mntOv'); if (ov) ov.classList.remove('open'); }
+        function mntVal(id) { const e = mntEl(id); return e ? e.value : ''; }
+        function mntMarkPaid(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const ov = mntOverlay();
+            ov.innerHTML = `<div class="mnt-box"><h3>Record maintenance payment</h3><div class="mnt-sub">${escapeHtml(p.client)}${p.project_name ? ' · ' + escapeHtml(p.project_name) : ''}</div>
+                <div class="row2"><div><label>Amount received (₹)</label><input id="mntPayAmt" type="number" value="${Number(p.amount) || ''}" oninput="mntPayPreview('${p.id}')"></div>
+                <div><label>Cycles paid</label><input id="mntPayCycles" type="number" min="1" value="1" oninput="mntPayCyc('${p.id}')"></div></div>
+                <div class="row2"><div><label>Received on</label><input id="mntPayDate" type="date" value="${todayISO()}"></div>
+                <div><label>Mode</label><select id="mntPayMode"><option>UPI</option><option>Cash</option><option>Bank Transfer</option><option>Cheque</option></select></div></div>
+                <label>Reference / UTR (optional)</label><input id="mntPayRef">
+                <label>Note (optional)</label><input id="mntPayNote">
+                <div class="mnt-cover" id="mntPayCover"></div><div class="mnt-err" id="mntPayErr"></div>
+                <div class="acts"><button class="mnt-ghost" onclick="mntClose()">Cancel</button><button class="btn-primary" id="mntPayBtn" onclick="mntSavePayment('${p.id}')">Save payment</button></div></div>`;
+            ov.classList.add('open'); mntPayPreview(p.id);
+        }
+        function mntPayCyc(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const c = Math.max(1, Math.round(Number(mntVal('mntPayCycles')) || 1));
+            const a = mntEl('mntPayAmt'); if (a) a.value = (Number(p.amount) || 0) * c;
+            mntPayPreview(id);
+        }
+        function mntPayPreview(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); const el = mntEl('mntPayCover'); if (!p || !el) return;
+            const c = Math.max(1, Math.round(Number(mntVal('mntPayCycles')) || 1)), from = mntD(p.next_due), to = addMonths(from, mntCycle(p) * c);
+            el.innerHTML = `Covers <b>${fmtDate(from)}</b> to <b>${fmtDate(to)}</b>. Next due after this: <b>${fmtDate(to)}</b>.<br>This amount is also added to <b>Cash & Bank</b> as income.`;
+        }
+        async function mntSavePayment(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const err = mntEl('mntPayErr'), btn = mntEl('mntPayBtn');
+            const amt = Number(mntVal('mntPayAmt')); if (!(amt > 0)) { err.textContent = 'Enter a valid amount.'; return; }
+            const cycles = Math.max(1, Math.round(Number(mntVal('mntPayCycles')) || 1));
+            const date = mntVal('mntPayDate') || todayISO(), mode = mntVal('mntPayMode') || 'UPI', ref = mntVal('mntPayRef').trim() || null, note = mntVal('mntPayNote').trim();
+            const from = mntD(p.next_due), to = addMonths(from, mntCycle(p) * cycles);
+            btn.disabled = true; btn.textContent = 'Saving...';
+            const ins = await sb.from('maintenance_payments').insert({ plan_id: p.id, paid_on: date, amount: amt, mode, reference: ref, period_from: from, period_to: to, note: note || null });
+            if (ins.error) { btn.disabled = false; btn.textContent = 'Save payment'; err.textContent = ins.error.message; return; }
+            const cb = await sb.from('cash_bank').insert({ txn_date: date, customer: p.client, direction: 'Received', mode, amount: amt, reference: ref, note: `Maintenance (${p.plan_type || 'Yearly'}) for ${p.project_name || 'project'}: ${fmtDate(from)} to ${fmtDate(to)}${note ? '. ' + note : ''}` });
+            if (cb.error) showToast('Payment saved, but the Cash/Bank entry failed: ' + cb.error.message, 'info');
+            const up = await sb.from('maintenance_plans').update({ next_due: to }).eq('id', p.id);
+            if (up.error) { btn.disabled = false; btn.textContent = 'Save payment'; err.textContent = 'Payment saved but next due date failed: ' + up.error.message; return; }
+            MNT.last = { id: p.id, amt, date, from, to };
+            await Promise.all([loadModule('maintenance_plans'), loadModule('maintenance_payments'), loadModule('cash_bank')]);
+            if (typeof refreshAlerts === 'function') refreshAlerts();
+            mntEl('mntOv').innerHTML = `<div class="mnt-box"><h3><i class="fa-solid fa-circle-check" style="color:var(--success)"></i> Payment saved</h3>
+                <div class="mnt-sub" style="margin-top:.4rem;">${fmtMoney(amt)} from ${escapeHtml(p.client)} added to Cash & Bank. Next due ${fmtDate(to)}.</div>
+                <div class="acts"><button class="mnt-ghost" onclick="mntClose()">Close</button>${p.whatsapp ? `<button class="btn-primary" onclick="mntReceipt('${p.id}')"><i class="fa-brands fa-whatsapp"></i> Send receipt</button>` : ''}</div></div>`;
+        }
+        function mntWa(p, text) {
+            if (!p.whatsapp) { showToast('No WhatsApp number saved for ' + p.client, 'info'); return; }
+            window.open('https://wa.me/' + waDigits(p.whatsapp) + '?text=' + encodeURIComponent(text), '_blank');
+        }
+        function mntReceipt(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)), l = MNT.last; if (!p || !l) return;
+            mntWa(p, `Hi ${p.client}, thank you! We have received ${fmtMoney(l.amt)} on ${fmtDate(l.date)} towards your ${(p.plan_type || 'Yearly').toLowerCase()} maintenance${p.project_name ? ' for ' + p.project_name : ''}.\nCovered period: ${fmtDate(l.from)} to ${fmtDate(l.to)}.\nNext due: ${fmtDate(l.to)}.\n\nThank you,\nFeczo`);
+        }
+        function mntRemind(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const d = daysFrom(mntD(p.next_due)), pay = (typeof fzSettings !== 'undefined' && fzSettings.payment_info) ? '\n\n' + fzSettings.payment_info : '';
+            const when = d < 0 ? `was due on ${fmtDate(p.next_due)} (${-d} day${d === -1 ? '' : 's'} ago)` : d === 0 ? 'is due today' : `is due on ${fmtDate(p.next_due)}`;
+            mntWa(p, `Hi ${p.client}, a friendly reminder from Feczo: your ${(p.plan_type || 'Yearly').toLowerCase()} maintenance${p.project_name ? ' for ' + p.project_name : ''} of ${fmtMoney(p.amount)} ${when}.${pay}\n\nThank you!`);
+        }
+        function mntHistory(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const pays = mntPays().filter(x => String(x.plan_id) === String(id)).sort((a, b) => String(b.paid_on).localeCompare(String(a.paid_on)));
+            const total = pays.reduce((a, x) => a + (Number(x.amount) || 0), 0);
+            const ov = mntOverlay();
+            ov.innerHTML = `<div class="mnt-box"><h3>Payment history</h3><div class="mnt-sub">${escapeHtml(p.client)}${p.project_name ? ' · ' + escapeHtml(p.project_name) : ''} · total ${fmtMoney(total)}</div>
+                ${pays.length ? `<table class="mnt-hist"><thead><tr><th>Paid on</th><th>Period</th><th>Mode</th><th>Amount</th></tr></thead><tbody>${pays.map(x => `<tr><td>${fmtDate(x.paid_on)}</td><td>${fmtDate(x.period_from)} → ${fmtDate(x.period_to)}</td><td>${escapeHtml(x.mode || '')}</td><td><b>${fmtMoney(x.amount)}</b></td></tr>`).join('')}</tbody></table>` : '<div class="mnt-cover">No payments recorded yet for this plan.</div>'}
+                <div class="acts"><button class="mnt-ghost" onclick="mntClose()">Close</button></div></div>`;
+            ov.classList.add('open');
+        }
+        async function mntToggle(id) {
+            const p = mntPlans().find(x => String(x.id) === String(id)); if (!p) return;
+            const next = p.status === 'Active' ? 'Paused' : 'Active';
+            const r = await sb.from('maintenance_plans').update({ status: next }).eq('id', id);
+            if (r.error) { showToast(r.error.message, 'info'); return; }
+            showToast(next === 'Paused' ? 'Plan paused. No reminders until you resume it.' : 'Plan resumed');
+            loadModule('maintenance_plans');
+        }
+        function mntFillProjects() {
+            const sel = mntEl('mntFromProject'); if (!sel) return;
+            const have = new Set(mntPlans().map(p => mntNorm(p.client) + '|' + mntNorm(p.project_name)));
+            const list = (typeof fzProjects !== 'undefined' ? fzProjects : []).filter(p => p.status !== 'Cancelled' && !have.has(mntNorm(p.client) + '|' + mntNorm(p.name)));
+            sel.innerHTML = '<option value="">+ From a client project…</option>' + list.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)} (${escapeHtml(p.status || '')})</option>`).join('');
+        }
+        function mntNewFromProject(sel) { const id = sel.value; sel.value = ''; if (id) mntFromProjectId(id); }
+        function mntFromProjectId(pid) {
+            const p = fzProj(pid); if (!p) return;
+            fzGoTo('maintenance');
+            openAddModal('maintenance_plans', { client: p.client, project_name: p.name, whatsapp: p.whatsapp || '' });
+        }
+
+        /* ---------- Maintenance: alerts, pop-ups, notifications ---------- */
+        function mntAlerts(out) {
+            mntPlans().filter(p => p.status === 'Active' && p.next_due).forEach(p => {
+                const d = daysFrom(mntD(p.next_due)); if (d > (p.remind_days ?? 7)) return;
+                out.push({ d, tone: d < 0 ? 'red' : d <= 1 ? 'amber' : 'blue', title: `Maintenance: ${p.client} ${fmtMoney(p.amount)}`,
+                    sub: d < 0 ? `Overdue by ${-d} day(s), was due ${fmtDate(p.next_due)}` : d === 0 ? 'Due today' : `Due in ${d} day(s), ${fmtDate(p.next_due)}`, btn: 'Mark paid', act: `mntMarkPaid('${p.id}')` });
+            });
+        }
+        function mntPopItems(out, dis, snz, day, nowMs) {
+            mntPlans().filter(p => p.status === 'Active' && p.next_due).forEach(p => {
+                const d = daysFrom(mntD(p.next_due)); if (d > (p.remind_days ?? 7)) return;
+                const key = 'mn' + p.id + '|' + p.next_due; if (dis[key] === day || (snz[key] || 0) > nowMs) return;
+                out.push({ key, kind: 'mnt', id: p.id, pri: d < 0 ? 0.5 : d === 0 ? 2.5 : 4 + d, tone: d < 0 ? 'red' : d === 0 ? 'amber' : 'blue', icon: 'fa-screwdriver-wrench',
+                    tag: 'Maintenance · ' + (d < 0 ? 'Overdue by ' + (-d) + (d === -1 ? ' day' : ' days') : d === 0 ? 'Due today' : 'Due in ' + d + (d === 1 ? ' day' : ' days')),
+                    title: p.client + (p.project_name ? ' · ' + p.project_name : ''), sub: fmtMoney(p.amount) + ' · ' + fmtDate(p.next_due) });
+            });
+        }
+        function mntNotifyCheck() {
+            mntPlans().filter(p => p.status === 'Active' && p.next_due).forEach(p => {
+                const d = daysFrom(mntD(p.next_due));
+                if (d <= (p.remind_days ?? 7)) fzNotify('mn' + p.id + p.next_due, 'Maintenance reminder', `${p.client} ${fmtMoney(p.amount)} ${d < 0 ? 'overdue' : d === 0 ? 'due today' : 'due in ' + d + ' day(s)'}`);
+            });
+        }
+
+        /* ---------- Project Folders ---------- */
+        function folBackup(r) {
+            if (r.status === 'Archived') return { tone: 'grey', label: r.last_backup ? 'Backup ' + fmtDate(r.last_backup) : 'Archived', need: false };
+            if (!r.last_backup) return { tone: 'red', label: 'No backup noted', need: true };
+            const a = -daysFrom(mntD(r.last_backup));
+            return { tone: a > 30 ? 'red' : a > 14 ? 'amber' : 'green', label: a <= 0 ? 'Backed up today' : 'Backup ' + a + ' day' + (a === 1 ? '' : 's') + ' ago', need: a > 30 };
+        }
+        function folUrl(u) { u = String(u || '').trim(); return !u ? '' : /^https?:\/\//i.test(u) ? u : 'https://' + u; }
+        function folCd(path) { return /^[a-z]:\\|\\/i.test(path) ? 'cd /d "' + path + '"' : 'cd "' + path + '"'; }
+        function folCopyFallback(text, done) {
+            const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0'; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); done(); } catch (e) { showToast('Could not copy. Please copy it manually.', 'info'); }
+            ta.remove();
+        }
+        function folCopy(text, msg) {
+            const done = () => showToast(msg || 'Copied');
+            if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => folCopyFallback(text, done));
+            else folCopyFallback(text, done);
+        }
+        function folSetup() { const el = mntEl('folSetup'); if (el) el.innerHTML = folErr ? MNT_SETUP_HTML(folErr) : ''; }
+        function renderFolders() {
+            const grid = mntEl('folGrid'); if (!grid) return;
+            folSetup();
+            const all = folRows(), q = mntNorm(FOL.q);
+            const live = all.filter(r => r.live_url).length, amc = all.filter(r => mntPlanFor(r)).length, need = all.filter(r => folBackup(r).need).length;
+            setText('folKTotal', String(all.length)); setText('folKTotalSub', all.filter(r => r.status === 'Delivered' || r.status === 'Maintenance').length + ' delivered');
+            setText('folKLive', String(live)); setText('folKAmc', String(amc)); setText('folKBackup', String(need));
+            const locs = ['Laptop', 'Desktop PC', 'Pen drive / HDD', 'Google Drive', 'GitHub', 'Server / Hosting', 'Other'].filter(l => all.some(r => (r.location || 'Other') === l));
+            mntEl('folChips').innerHTML = [`<button class="mnt-chip ${FOL.loc === 'all' ? 'on' : ''}" data-folchip="all">All<b>${all.length}</b></button>`]
+                .concat(locs.map(l => `<button class="mnt-chip ${FOL.loc === l ? 'on' : ''}" data-folchip="${escapeHtml(l)}"><i class="${FOL_ICON[l]}"></i> ${escapeHtml(l)}<b>${all.filter(r => (r.location || 'Other') === l).length}</b></button>`))
+                .concat([`<button class="mnt-chip ${FOL.loc === '__backup' ? 'on' : ''}" data-folchip="__backup">Backup needed<b>${need}</b></button>`]).join('');
+            document.querySelectorAll('[data-folview]').forEach(b => b.classList.toggle('on', b.dataset.folview === FOL.view));
+            const list = all.filter(r => {
+                if (FOL.loc === '__backup') { if (!folBackup(r).need) return false; }
+                else if (FOL.loc !== 'all' && (r.location || 'Other') !== FOL.loc) return false;
+                return !q || mntNorm([r.project_name, r.client, r.folder_path, r.device_label, r.tech_stack, r.hosting, r.status, r.note].join(' ')).includes(q);
+            }).sort((a, b) => String(a.project_name).localeCompare(String(b.project_name)));
+            const tbox = mntEl('folTableBox');
+            if (FOL.view === 'table') {
+                grid.style.display = 'none'; tbox.style.display = '';
+                tbox.innerHTML = `<table class="data-table"><thead><tr><th>Project</th><th>Stored on</th><th>Folder path</th><th>Live</th><th>Maintenance</th><th>Backup</th><th>Status</th><th></th></tr></thead><tbody>${list.length ? list.map(folRow).join('') : '<tr class="empty-row"><td colspan="8">No project folders match.</td></tr>'}</tbody></table>`;
+            } else {
+                tbox.style.display = 'none'; grid.style.display = '';
+                grid.innerHTML = list.length ? list.map(folCard).join('') : `<div class="mnt-empty">${all.length ? 'No projects match this filter.' : 'No project folders noted yet.<br>Add each project once: folder path, which laptop or drive, live link and backup date. Then you can find anything in seconds.'}</div>`;
+            }
+            folFillProjects();
+        }
+        function folMntText(r) {
+            const p = mntPlanFor(r); if (!p) return '';
+            const s = mntStatus(p);
+            return `${fmtMoney(p.amount)} / ${mntUnit(p)} · ${s.label}`;
+        }
+        function folCard(r) {
+            const b = folBackup(r), plan = mntPlanFor(r), ic = FOL_ICON[r.location] || FOL_ICON.Other;
+            const tone = b.need ? 'red' : r.status === 'Delivered' || r.status === 'Maintenance' ? 'green' : r.status === 'Archived' || r.status === 'On hold' ? 'grey' : 'blue';
+            const tags = String(r.tech_stack || '').split(/[,|]/).map(x => x.trim()).filter(Boolean);
+            const btns = [
+                `<button class="main" data-fol="copy" data-id="${r.id}"><i class="fa-regular fa-copy"></i> Copy path</button>`,
+                `<button data-fol="cd" data-id="${r.id}" title="Copy a terminal command to open this folder"><i class="fa-solid fa-terminal"></i> cd</button>`,
+                r.live_url ? `<button data-fol="live" data-id="${r.id}"><i class="fa-solid fa-globe"></i> Live</button>` : '',
+                r.repo_url ? `<button data-fol="repo" data-id="${r.id}"><i class="fa-brands fa-github"></i> Repo</button>` : '',
+                r.status !== 'Archived' ? `<button data-fol="backup" data-id="${r.id}" title="Mark as backed up today"><i class="fa-solid fa-cloud-arrow-up"></i> Backed up</button>` : '',
+                `<button data-fol="edit" data-id="${r.id}"><i class="fa-solid fa-pen"></i></button>`,
+                `<button class="danger" data-fol="del" data-id="${r.id}"><i class="fa-solid fa-trash"></i></button>`
+            ].join('');
+            return `<div class="glass-card mnt-card ${tone}">
+                <div class="mnt-top"><div><h4>${escapeHtml(r.project_name)}</h4><div class="mnt-sub">${escapeHtml(r.client || 'No client')}</div></div><span class="mnt-pill">${escapeHtml(r.status || 'Active')}</span></div>
+                <div class="fol-path" data-fol="copy" data-id="${r.id}" title="Click to copy"><i class="fa-solid fa-folder-open"></i><span>${escapeHtml(r.folder_path)}</span><i class="fa-regular fa-copy"></i></div>
+                <div class="mnt-meta">
+                    <div><span>Stored on</span><b><i class="${ic}"></i> ${escapeHtml(r.location || 'Other')}${r.device_label ? '<br><small style="font-weight:400;color:var(--text-muted);">' + escapeHtml(r.device_label) + '</small>' : ''}</b></div>
+                    <div><span>Last backup</span><b style="color:${b.tone === 'red' ? 'var(--danger)' : b.tone === 'amber' ? 'var(--warning)' : 'inherit'};">${escapeHtml(b.label)}</b></div>
+                    <div><span>Hosting / backend</span><b>${escapeHtml(r.hosting || '—')}</b></div>
+                    <div><span>Maintenance</span><b>${plan ? `<a class="mnt-link" data-fol="amc">${escapeHtml(folMntText(r))}</a>` : '—'}</b></div>
+                </div>
+                ${tags.length ? `<div class="fol-tags">${tags.map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+                ${r.note ? `<div class="fol-note">${escapeHtml(r.note)}</div>` : ''}
+                <div class="mnt-btns">${btns}</div></div>`;
+        }
+        function folRow(r) {
+            const b = folBackup(r), plan = mntPlanFor(r), ic = FOL_ICON[r.location] || FOL_ICON.Other;
+            return `<tr><td class="emp-name">${escapeHtml(r.project_name)}<div class="mnt-sub">${escapeHtml(r.client || '')}</div></td>
+                <td><i class="${ic}"></i> ${escapeHtml(r.location || 'Other')}<div class="mnt-sub">${escapeHtml(r.device_label || '')}</div></td>
+                <td><code>${escapeHtml(r.folder_path)}</code></td>
+                <td>${r.live_url ? `<a class="mnt-link" data-fol="live" data-id="${r.id}">Open</a>` : '—'}</td>
+                <td>${plan ? `<a class="mnt-link" data-fol="amc">${escapeHtml(folMntText(r))}</a>` : '—'}</td>
+                <td><span class="status-badge ${b.tone === 'red' ? 'status-overdue' : b.tone === 'amber' ? 'status-pending' : b.tone === 'green' ? 'status-active' : 'status-leave'}">${escapeHtml(b.label)}</span></td>
+                <td>${escapeHtml(r.status || 'Active')}</td>
+                <td><div style="display:flex;gap:6px;"><div class="icon-btn" style="width:32px;height:32px;box-shadow:none;" data-fol="copy" data-id="${r.id}" title="Copy path"><i class="fa-regular fa-copy"></i></div>${actionButtons('project_folders', r.id)}</div></td></tr>`;
+        }
+        function folFillProjects() {
+            const sel = mntEl('folFromProject'); if (!sel) return;
+            const have = new Set(folRows().map(r => mntNorm(r.project_name)));
+            const list = (typeof fzProjects !== 'undefined' ? fzProjects : []).filter(p => p.status !== 'Cancelled' && !have.has(mntNorm(p.name)));
+            sel.innerHTML = '<option value="">+ From a client project…</option>' + list.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
+        }
+        function folNewFromProject(sel) {
+            const id = sel.value; sel.value = ''; if (!id) return;
+            const p = fzProj(id); if (!p) return;
+            openAddModal('project_folders', { project_name: p.name, client: p.client, status: p.status === 'Active' ? 'Active' : 'Delivered' });
+        }
+
+        /* ---------- click handling for both sections ---------- */
+        document.addEventListener('click', async e => {
+            const t = e.target; if (!t || !t.closest) return;
+            const chip = t.closest('[data-chip]');
+            if (chip) { MNT.filter = chip.dataset.chip; renderMaintenance(); return; }
+            const fchip = t.closest('[data-folchip]');
+            if (fchip) { FOL.loc = fchip.dataset.folchip; renderFolders(); return; }
+            const fv = t.closest('[data-folview]');
+            if (fv) { FOL.view = fv.dataset.folview; renderFolders(); return; }
+            const m = t.closest('[data-mnt]');
+            if (m) {
+                const a = m.dataset.mnt, id = m.dataset.id;
+                if (a === 'pay') mntMarkPaid(id); else if (a === 'wa') mntRemind(id); else if (a === 'hist') mntHistory(id);
+                else if (a === 'toggle') mntToggle(id); else if (a === 'edit') openEditModal('maintenance_plans', id); else if (a === 'del') deleteRecord('maintenance_plans', id);
+                return;
+            }
+            const f = t.closest('[data-fol]');
+            if (f) {
+                const a = f.dataset.fol; if (a === 'amc') { fzGoTo('maintenance'); return; }
+                const r = folRows().find(x => String(x.id) === String(f.dataset.id)); if (!r) return;
+                if (a === 'copy') folCopy(r.folder_path, 'Folder path copied');
+                else if (a === 'cd') folCopy(folCd(r.folder_path), 'Terminal command copied');
+                else if (a === 'live') window.open(folUrl(r.live_url), '_blank');
+                else if (a === 'repo') window.open(folUrl(r.repo_url), '_blank');
+                else if (a === 'edit') openEditModal('project_folders', r.id);
+                else if (a === 'del') deleteRecord('project_folders', r.id);
+                else if (a === 'backup') {
+                    const u = await sb.from('project_folders').update({ last_backup: todayISO() }).eq('id', r.id);
+                    if (u.error) { showToast(u.error.message, 'info'); return; }
+                    showToast('Marked as backed up today'); loadModule('project_folders');
+                }
+            }
+        });
+
         /* ----------------------------------------------------
            REMINDER POP-UPS: bills, recharges, meetings slide in on whatever page is open
         ---------------------------------------------------- */
@@ -4245,10 +4815,11 @@
                 const key = 'm' + m.id + m.meeting_date + m.meeting_time; if (dis[key] === day || (snz[key] || 0) > nowMs) return;
                 out.push({ key, kind: 'meet', id: m.id, ts: t.getTime(), pri: 1, tone: mins <= 5 ? 'red' : 'amber', icon: 'fa-video', tag: mins > 0 ? 'Meeting soon' : 'Meeting now', title: m.title, sub: [paT12(m.meeting_time), m.with_whom ? 'with ' + m.with_whom : '', m.place || ''].filter(Boolean).join(' · ') });
             });
+            mntPopItems(out, dis, snz, day, nowMs);
             return out.sort((a, b) => a.pri - b.pri);
         }
         function fzPopCard(it) {
-            const btns = it.kind === 'bill'
+            const btns = it.kind === 'mnt' ? '<button class="go" data-act="mntpay">Mark paid</button><button data-act="snooze">Remind later</button>' : it.kind === 'bill'
                 ? '<button class="go" data-act="pay">Mark paid</button><button data-act="snooze">Remind later</button>'
                 : '<button class="go" data-act="done">Done</button><button data-act="snooze">Snooze 10 min</button>';
             return `<div class="fz-pop-card ${it.tone}" data-key="${escapeHtml(it.key)}"><div class="fz-pop-ico"><i class="fa-solid ${it.icon}"></i></div><div class="fz-pop-body"><div class="fz-pop-tag">${escapeHtml(it.tag)}</div><b class="fz-pop-t">${escapeHtml(it.title)}</b><div class="fz-pop-s">${escapeHtml(it.sub)}</div>${it.ts ? `<span class="fz-pop-cd" data-ts="${it.ts}"></span>` : ''}<div class="fz-pop-btns">${btns}<button data-act="open">View all</button></div></div><button class="fz-pop-x" data-act="close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button><i class="fz-pop-line"></i></div>`;
@@ -4289,6 +4860,7 @@
             else if (act === 'snooze') { st.s[it.key] = Date.now() + (it.kind === 'meet' ? 10 : 120) * 60000; fzPopSave(st); fzPopRemove(card); showToast('Okay, I will remind you again later'); }
             else if (act === 'done') { await markMeetingDone(it.id); fzPopCheck(); }
             else if (act === 'pay') { await markBillPaid(it.id); setTimeout(fzPopCheck, 600); }
+            else if (act === 'mntpay') { st.s[it.key] = Date.now() + 30 * 60000; fzPopSave(st); fzPopRemove(card); mntMarkPaid(it.id); }
         });
         setInterval(fzPopTick, 1000);
         setInterval(fzPopCheck, 20000);
@@ -4311,7 +4883,7 @@
             if (e.target.closest('#fzTestPush')) fzTestPush();
         });
         function labelFor(modKey) {
-            return { employees: 'Employee', attendance: 'Attendance Record', payroll: 'Payslip', inventory: 'Asset', invoices: 'Invoice', clients: 'Client', tickets: 'Ticket', leads: 'Lead', notes: 'Note', cash_bank: 'Cash/Bank Entry', expenses: 'Expense', recurring_bills: 'Recurring Bill', meetings: 'Meeting' }[modKey] || modKey;
+            return { employees: 'Employee', attendance: 'Attendance Record', payroll: 'Payslip', inventory: 'Asset', invoices: 'Invoice', clients: 'Client', tickets: 'Ticket', leads: 'Lead', notes: 'Note', cash_bank: 'Cash/Bank Entry', expenses: 'Expense', recurring_bills: 'Recurring Bill', meetings: 'Meeting', maintenance_plans: 'Maintenance Plan', maintenance_payments: 'Payment', project_folders: 'Project Folder' }[modKey] || modKey;
         }
 
         function closeModal() {
@@ -6124,6 +6696,7 @@
             const ev = [];
             (moduleCache.meetings || []).filter(m => m.meeting_date === iso && m.status !== 'Cancelled').forEach(m => ev.push({ k: 'meet', t: m.meeting_time || '', icon: 'fa-video', col: '#4C8DFF', title: m.title, sub: [m.with_whom ? 'with ' + m.with_whom : '', m.place || ''].filter(Boolean).join(' · '), done: m.status === 'Done', id: m.id }));
             (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && b.next_due === iso).forEach(b => ev.push({ k: 'bill', t: '', icon: 'fa-receipt', col: '#FFB547', title: b.title + ' due', sub: paMoney(b.amount) }));
+            (moduleCache.maintenance_plans || []).filter(p => p.status === 'Active' && mntD(p.next_due) === iso).forEach(p => ev.push({ k: 'bill', t: '', icon: 'fa-screwdriver-wrench', col: '#05CD99', title: 'Maintenance due: ' + p.client, sub: paMoney(p.amount) }));
             (typeof fzProjects !== 'undefined' ? fzProjects : []).filter(p => p.due_date === iso && !/cancel|complete|invoice/i.test(p.status || '')).forEach(p => ev.push({ k: 'proj', t: '', icon: 'fa-diagram-project', col: '#a78bfa', title: 'Project: ' + p.name, sub: p.client || '' }));
             return ev.sort((a, b) => (a.t || '99').localeCompare(b.t || '99'));
         }
@@ -7333,6 +7906,7 @@
                 invOver: unpaid.filter(i => i.overdue), invDue7: unpaid.filter(i => !i.overdue && i.daysToDue !== null && i.daysToDue <= 7), outstanding: aiSum(unpaid, 'bal'),
                 billsOver: bills.filter(b => daysFrom(b.next_due) < 0), billsSoon: bills.filter(b => { const d = daysFrom(b.next_due); return d >= 0 && d <= (b.remind_days ?? 3); }), billsTom: bills.filter(b => b.next_due === tom),
                 meetToday: sched.filter(m => m.meeting_date === today), meetTom: sched.filter(m => m.meeting_date === tom),
+                mntOver: mntPlans().filter(p => p.status === 'Active' && daysFrom(mntD(p.next_due)) < 0), mntSoon: mntPlans().filter(p => { const x = daysFrom(mntD(p.next_due)); return p.status === 'Active' && x >= 0 && x <= (p.remind_days ?? 7); }),
                 tasksOver: tasks.filter(t => t.due_date && String(t.due_date).slice(0, 10) < today), leavesPend: AI.leaves().filter(l => l.status === 'Pending'),
                 present: att.filter(aiIsPresent), totalEmp: emps.length, absent: emps.filter(e => !names.has(String(e.name || '').toLowerCase())),
                 spentToday: aiSum(ex.filter(e => String(e.exp_date).slice(0, 10) === today), 'amount'), spentMonth: aiSum(ex.filter(e => String(e.exp_date).startsWith(ym)), 'amount'),
@@ -7361,6 +7935,8 @@
             if (d.invDue7.length) A.push(row('amber', 'fa-hourglass-half', `${d.invDue7.length} invoice(s) due in 7 days · ${fmtMoney(aiSum(d.invDue7, 'bal'))}`, fzNames(d.invDue7, i => i.client), 'finance'));
             if (d.billsOver.length) A.push(row('red', 'fa-bell', `${d.billsOver.length} bill(s) overdue`, fzNames(d.billsOver, b => b.title + ' ' + fmtMoney(b.amount)), 'expenses'));
             if (d.billsSoon.length) A.push(row('amber', 'fa-bell', `${d.billsSoon.length} bill(s) due soon`, fzNames(d.billsSoon, b => b.title + ' ' + fmtMoney(b.amount) + ' (' + (daysFrom(b.next_due) === 0 ? 'today' : daysFrom(b.next_due) + 'd') + ')'), 'expenses'));
+            if (d.mntOver.length) A.push(row('red', 'fa-screwdriver-wrench', `${d.mntOver.length} maintenance payment(s) overdue · ${fmtMoney(d.mntOver.reduce((a, p) => a + (Number(p.amount) || 0), 0))}`, fzNames(d.mntOver, p => p.client), 'maintenance'));
+            if (d.mntSoon.length) A.push(row('amber', 'fa-screwdriver-wrench', `${d.mntSoon.length} maintenance renewal(s) due soon`, fzNames(d.mntSoon, p => p.client + ' ' + fmtMoney(p.amount)), 'maintenance'));
             if (d.tasksOver.length) A.push(row('red', 'fa-list-check', `${d.tasksOver.length} task(s) overdue`, fzNames(d.tasksOver, t => t.title), 'projects'));
             if (d.leavesPend.length) A.push(row('blue', 'fa-umbrella-beach', `${d.leavesPend.length} leave request(s) waiting`, '', 'attendance'));
             if ((eve || h >= 10) && d.absent.length) A.push(row('amber', 'fa-user-xmark', eve ? `Absent today: ${d.absent.length}` : `${d.absent.length} not clocked in yet`, fzNames(d.absent, e => e.name), 'attendance'));
@@ -7568,6 +8144,7 @@ function fzRender() {
             p.status === 'Completed' ? `<button class="main" onclick="fzCompleteProject('${p.id}')">Create invoice</button>` : '',
             inv ? `<button class="main" onclick="fzOpenInvoice('${inv.id}')"><i class="fa-solid fa-file-invoice"></i> ${escapeHtml(inv.invoice_no)}</button>` : '',
             p.whatsapp ? `<button onclick="window.open('https://wa.me/'+waDigits('${escapeHtml(p.whatsapp)}'),'_blank')"><i class="fa-brands fa-whatsapp" style="color:#25D366"></i></button>` : '',
+            ['Paid', 'Invoiced', 'Completed'].includes(p.status) && !mntHasPlanFor(p) ? `<button class="main" onclick="mntFromProjectId('${p.id}')"><i class="fa-solid fa-screwdriver-wrench"></i> Add maintenance</button>` : '',
             p.status === 'Active' ? `<button onclick="fzCancelProject('${p.id}')" title="Hide this project">Cancel</button>` : ''
         ].join('');
         return `<div class="glass-card fz-pc"><div style="display:flex;justify-content:space-between;gap:.6rem;align-items:flex-start;"><div><h4>${escapeHtml(p.name)}</h4><div class="sub">${escapeHtml(p.client)}${p.due_date ? ' · due ' + fmtDate(p.due_date) : ''}</div></div><span class="status-badge ${badge}">${escapeHtml(p.status)}</span></div>
