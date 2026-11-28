@@ -1387,39 +1387,82 @@
             .ai-chat-input-row input{font-size:16px;padding:11px 16px;min-width:0}
         }
         /* ===== Reminder pop-ups (visible on every page) ===== */
-        #fz-pop{position:fixed;top:84px;right:18px;width:min(370px,calc(100vw - 24px));display:flex;flex-direction:column;gap:14px;z-index:1200;pointer-events:none}
-        .fz-pop-card{--pc:76,141,255;pointer-events:auto;position:relative;overflow:hidden;display:flex;gap:.85rem;padding:1rem 2.4rem 1.1rem .95rem;border-radius:20px;color:#fff;
-            background:linear-gradient(135deg,rgba(14,18,32,.97),rgba(24,28,48,.97));border:1px solid rgba(var(--pc),.6);
-            box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 30px rgba(var(--pc),.32);backdrop-filter:blur(14px);
-            animation:fzPopIn .8s cubic-bezier(.2,1.15,.3,1) both,fzPopGlow 2.6s ease-in-out .8s infinite}
-        .fz-pop-card.red{--pc:238,93,80}.fz-pop-card.amber{--pc:255,181,71}.fz-pop-card.blue{--pc:76,141,255}
-        .fz-pop-card::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.13) 50%,transparent 65%);transform:translateX(-120%);animation:fzPopShine 4.2s ease-in-out 1s infinite}
-        .fz-pop-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,rgba(var(--pc),1),rgba(var(--pc),.2))}
-        .fz-pop-card.out{animation:fzPopOut .4s cubic-bezier(.6,0,.9,.4) forwards}
-        .fz-pop-ico{flex:none;position:relative;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:1.2rem;color:rgb(var(--pc));background:rgba(var(--pc),.16);animation:fzPopWobble 3.2s ease-in-out 1.2s infinite}
-        .fz-pop-ico::after{content:"";position:absolute;inset:0;border-radius:15px;border:2px solid rgba(var(--pc),.7);animation:fzPopRing 2.2s ease-out infinite}
+        #fz-pop{position:fixed;top:84px;right:18px;width:min(400px,calc(100vw - 24px));display:flex;flex-direction:column;gap:18px;z-index:1200;pointer-events:none;perspective:900px}
+        .fz-pop-card{--pc:255,120,60;--g1:#ff8a00;--g2:#ff2e7e;--g3:#7b2ff7;--ac:196,30,110;pointer-events:auto;position:relative;overflow:hidden;display:flex;gap:1rem;padding:1.15rem 2.8rem 1.25rem 1.1rem;border-radius:26px;color:#fff;isolation:isolate;
+            background:linear-gradient(120deg,var(--g1),var(--g2),var(--g3),var(--g2),var(--g1));background-size:300% 300%;
+            border:1.5px solid rgba(255,255,255,.45);
+            box-shadow:0 24px 50px rgba(var(--pc),.45),0 0 0 4px rgba(var(--pc),.14),inset 0 1px 0 rgba(255,255,255,.55);
+            animation:fzPopIn .9s cubic-bezier(.2,1.25,.3,1) both,fzPopGrad 6s ease-in-out infinite,fzPopGlow 2.4s ease-in-out .9s infinite,fzPopFloat 4.5s ease-in-out 1s infinite}
+        .fz-pop-card.amber{--pc:255,90,90;--g1:#ff9100;--g2:#ff2e7e;--g3:#7b2ff7;--ac:196,30,110}
+        .fz-pop-card.red{--pc:255,40,70;--g1:#ff1f4b;--g2:#ff5a1f;--g3:#ffb400;--ac:200,20,50}
+        .fz-pop-card.blue{--pc:60,120,255;--g1:#2563ff;--g2:#00c2e0;--g3:#8b5cf6;--ac:30,70,220}
+        .fz-pop-card:hover{animation-play-state:running,running,running,paused}
+        .fz-pop-card::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);animation:fzPopShine 3.4s ease-in-out 1s infinite}
+        .fz-pop-card::after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(120% 90% at 100% 100%,rgba(0,0,0,.28),transparent 60%)}
+        .fz-pop-card.out{animation:fzPopOut .45s cubic-bezier(.6,0,.9,.4) forwards}
+        /* soft glow blobs + rising bubbles */
+        .fz-pop-aura{position:absolute;z-index:-1;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.38),transparent 68%);top:-80px;left:-60px;pointer-events:none;animation:fzPopDrift 7s ease-in-out infinite alternate}
+        .fz-pop-aura.b{top:auto;left:auto;right:-70px;bottom:-90px;width:220px;height:220px;background:radial-gradient(circle,rgba(255,255,255,.22),transparent 70%);animation-duration:9s;animation-direction:alternate-reverse}
+        .fz-pop-sp{position:absolute;z-index:-1;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,.35);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.7);opacity:0;pointer-events:none;animation:fzPopSpark 4.2s ease-in infinite}
+        .fz-pop-sp.s1{left:14%;bottom:-10px;animation-delay:.2s}.fz-pop-sp.s2{left:40%;bottom:-10px;animation-delay:1.4s;width:8px;height:8px}.fz-pop-sp.s3{left:64%;bottom:-10px;animation-delay:2.2s;width:16px;height:16px}.fz-pop-sp.s4{left:86%;bottom:-10px;animation-delay:.8s;width:8px;height:8px}.fz-pop-sp.s5{left:28%;bottom:-10px;animation-delay:3s;width:10px;height:10px}
+        /* icon: white glass disc, gradient glyph, soft pulse */
+        .fz-pop-ico{flex:none;position:relative;width:58px;height:58px;margin-top:.1rem;border-radius:50%;display:grid;place-items:center;font-size:1.45rem;background:#fff;color:rgb(var(--ac));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 -4px 10px rgba(var(--ac),.18);animation:fzPopBadge 3.2s ease-in-out 1s infinite}
+        .fz-pop-ico i{animation:fzPopWobble 3.2s ease-in-out 1.2s infinite}
+        .fz-pop-ico::before,.fz-pop-ico::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid rgba(255,255,255,.85);animation:fzPopRing 2.4s ease-out infinite;pointer-events:none}
+        .fz-pop-ico::after{animation-delay:1.2s}
         .fz-pop-body{min-width:0;flex:1}
-        .fz-pop-tag{font-size:.66rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgb(var(--pc))}
-        .fz-pop-t{display:block;font-size:1rem;line-height:1.3;margin:.1rem 0 .1rem;overflow-wrap:anywhere}
-        .fz-pop-s{font-size:.8rem;color:rgba(255,255,255,.62);overflow-wrap:anywhere}
-        .fz-pop-cd{display:inline-block;margin-top:.35rem;font-family:'Sora',sans-serif;font-weight:800;font-size:1.15rem;font-variant-numeric:tabular-nums;color:rgb(var(--pc))}
-        .fz-pop-btns{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.65rem}
-        .fz-pop-btns button{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;border-radius:10px;padding:.4rem .8rem;font:inherit;font-size:.76rem;font-weight:700;cursor:pointer;transition:transform .15s,background .15s}
-        .fz-pop-btns button:hover{transform:translateY(-1px);background:rgba(255,255,255,.14)}
-        .fz-pop-btns button.go{border:0;background:linear-gradient(135deg,rgb(var(--pc)),rgba(var(--pc),.65));color:#fff;box-shadow:0 6px 16px rgba(var(--pc),.35)}
-        .fz-pop-x{position:absolute;top:.55rem;right:.55rem;z-index:2;width:28px;height:28px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;transition:transform .2s,background .2s}
-        .fz-pop-x:hover{background:rgba(255,255,255,.2);transform:rotate(90deg)}
-        .fz-pop-line{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,rgb(var(--pc)),transparent);background-size:200% 100%;animation:fzPopLine 2.2s linear infinite}
-        .fz-pop-more{pointer-events:auto;align-self:flex-end;border:1px solid rgba(76,141,255,.5);background:rgba(14,18,32,.95);color:#8fefff;border-radius:99px;padding:.45rem 1rem;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;animation:fzPopIn .6s cubic-bezier(.2,1.15,.3,1) both}
-        @keyframes fzPopIn{0%{opacity:0;transform:translateX(130%) scale(.9) rotate(4deg)}60%{opacity:1;transform:translateX(-8px) scale(1.02) rotate(-1deg)}100%{opacity:1;transform:none}}
-        @keyframes fzPopInM{0%{opacity:0;transform:translateY(-140%) scale(.92)}60%{opacity:1;transform:translateY(6px) scale(1.02)}100%{opacity:1;transform:none}}
-        @keyframes fzPopOut{to{opacity:0;transform:translateX(120%) scale(.92)}}
-        @keyframes fzPopGlow{0%,100%{box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 22px rgba(var(--pc),.25)}50%{box-shadow:0 18px 44px rgba(0,0,0,.6),0 0 42px rgba(var(--pc),.55)}}
+        .fz-pop-body>*{animation:fzPopRise .55s cubic-bezier(.2,.9,.3,1) both}
+        .fz-pop-tag{display:inline-flex;align-items:center;gap:.45rem;padding:.2rem .7rem;border-radius:99px;background:rgba(255,255,255,.22);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4);font-size:.64rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#fff;animation-delay:.25s !important}
+        .fz-pop-tag::before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.9);animation:fzPopLive 1.4s ease-out infinite}
+        .fz-pop-t{display:block;font-size:1.3rem;font-weight:800;line-height:1.25;margin:.5rem 0 .1rem;overflow-wrap:anywhere;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.3);animation-delay:.32s !important}
+        .fz-pop-s{font-size:.82rem;color:rgba(255,255,255,.88);overflow-wrap:anywhere;animation-delay:.4s !important}
+        /* clock-style countdown tiles */
+        .fz-pop-cd{display:flex;align-items:center;gap:.3rem;margin-top:.7rem;animation-delay:.48s !important}
+        .fz-cd-t{display:flex;flex-direction:column;align-items:center;min-width:52px;padding:.3rem .4rem .25rem;border-radius:13px;background:rgba(10,8,30,.38);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25),0 6px 14px rgba(0,0,0,.2);backdrop-filter:blur(4px)}
+        .fz-cd-t b{font-family:'Sora',sans-serif;font-weight:800;font-size:1.5rem;line-height:1.1;font-variant-numeric:tabular-nums;color:#fff;text-shadow:0 0 14px rgba(255,255,255,.55)}
+        .fz-cd-t b.flip{animation:fzPopFlip .4s cubic-bezier(.3,1.5,.5,1)}
+        .fz-cd-t small{font-size:.54rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+        .fz-cd-sep{font-weight:800;font-size:1.3rem;color:#fff;animation:fzPopBlink 1s steps(2) infinite;margin-top:-.5rem}
+        .fz-cd-now{display:inline-block;padding:.4rem 1rem;border-radius:99px;background:rgba(10,8,30,.38);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3);font-family:'Sora',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+        .fz-pop-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.9rem;animation-delay:.56s !important}
+        .fz-pop-btns button{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.18);color:#fff;border-radius:12px;padding:.5rem 1rem;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;backdrop-filter:blur(4px);transition:transform .18s cubic-bezier(.3,1.6,.5,1),background .18s,box-shadow .18s}
+        .fz-pop-btns button:hover{transform:translateY(-2px) scale(1.05);background:rgba(255,255,255,.3)}
+        .fz-pop-btns button:active{transform:scale(.94)}
+        .fz-pop-btns button.go{border:0;background:#fff;color:rgb(var(--ac));font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.28);animation:fzPopBtn 1.8s ease-in-out 1.4s infinite}
+        .fz-pop-btns button.go:hover{background:#fff}
+        .fz-pop-btns button.go::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(var(--ac),.28),transparent);transform:skewX(-20deg);animation:fzPopBtnShine 2.6s ease-in-out 1.6s infinite}
+        .fz-pop-x{position:absolute;top:.7rem;right:.7rem;z-index:2;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;cursor:pointer;transition:transform .25s,background .25s}
+        .fz-pop-x:hover{background:rgba(255,255,255,.5);transform:rotate(180deg) scale(1.1)}
+        .fz-pop-line{position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,transparent,#fff,transparent);background-size:200% 100%;animation:fzPopLine 1.6s linear infinite;opacity:.9}
+        /* urgent (< 5 min): faster colour flow, hot glow, shake, ticking seconds */
+        .fz-pop-card.urgent{animation:fzPopIn .9s cubic-bezier(.2,1.25,.3,1) both,fzPopGrad 2.5s ease-in-out infinite,fzPopGlowHot 1s ease-in-out .9s infinite,fzPopShake 4s ease-in-out 1s infinite}
+        .fz-pop-card.urgent .fz-pop-ico::before,.fz-pop-card.urgent .fz-pop-ico::after{animation-duration:1.2s}
+        .fz-pop-card.urgent .fz-pop-ico::after{animation-delay:.6s}
+        .fz-pop-card.urgent .fz-cd-t:last-of-type{animation:fzPopBeat 1s ease-in-out infinite}
+        .fz-pop-more{pointer-events:auto;align-self:flex-end;border:1.5px solid rgba(255,255,255,.5);background:linear-gradient(120deg,#2563ff,#8b5cf6);color:#fff;border-radius:99px;padding:.5rem 1.1rem;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(80,90,255,.45);animation:fzPopIn .6s cubic-bezier(.2,1.15,.3,1) both}
+        @keyframes fzPopIn{0%{opacity:0;transform:translateX(140%) scale(.85) rotateY(35deg) rotate(5deg);filter:blur(6px)}60%{opacity:1;transform:translateX(-10px) scale(1.03) rotateY(-4deg) rotate(-1deg);filter:blur(0)}100%{opacity:1;transform:none}}
+        @keyframes fzPopInM{0%{opacity:0;transform:translateY(-150%) scale(.9);filter:blur(6px)}60%{opacity:1;transform:translateY(8px) scale(1.03);filter:blur(0)}100%{opacity:1;transform:none}}
+        @keyframes fzPopOut{to{opacity:0;transform:translateX(120%) scale(.9) rotate(6deg);filter:blur(6px)}}
+        @keyframes fzPopGrad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+        @keyframes fzPopFloat{0%,100%{translate:0 0}50%{translate:0 -5px}}
+        @keyframes fzPopGlow{0%,100%{box-shadow:0 24px 50px rgba(var(--pc),.35),0 0 0 4px rgba(var(--pc),.10),inset 0 1px 0 rgba(255,255,255,.55)}50%{box-shadow:0 28px 64px rgba(var(--pc),.7),0 0 0 8px rgba(var(--pc),.2),inset 0 1px 0 rgba(255,255,255,.55)}}
+        @keyframes fzPopGlowHot{0%,100%{box-shadow:0 24px 50px rgba(var(--pc),.5),0 0 0 4px rgba(var(--pc),.2),inset 0 1px 0 rgba(255,255,255,.55)}50%{box-shadow:0 30px 80px rgba(var(--pc),.95),0 0 0 12px rgba(var(--pc),.28),inset 0 1px 0 rgba(255,255,255,.55)}}
         @keyframes fzPopShine{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
-        @keyframes fzPopRing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.55);opacity:0}}
-        @keyframes fzPopWobble{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}92%{transform:rotate(12deg)}95%{transform:rotate(-8deg)}98%{transform:rotate(5deg)}}
+        @keyframes fzPopRing{0%{transform:scale(1);opacity:.85}100%{transform:scale(1.45);opacity:0}}
+        @keyframes fzPopBadge{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+        @keyframes fzPopWobble{0%,80%,100%{transform:rotate(0) scale(1)}84%{transform:rotate(-16deg) scale(1.18)}88%{transform:rotate(14deg) scale(1.18)}92%{transform:rotate(-9deg)}96%{transform:rotate(5deg)}}
         @keyframes fzPopLine{from{background-position:200% 0}to{background-position:-200% 0}}
-        @media (max-width:700px){#fz-pop{top:calc(env(safe-area-inset-top,0px) + 68px);right:12px;left:12px;width:auto}.fz-pop-card{animation:fzPopInM .8s cubic-bezier(.2,1.15,.3,1) both,fzPopGlow 2.6s ease-in-out .8s infinite}}
+        @keyframes fzPopRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        @keyframes fzPopLive{0%{box-shadow:0 0 0 0 rgba(255,255,255,.9)}100%{box-shadow:0 0 0 9px rgba(255,255,255,0)}}
+        @keyframes fzPopFlip{0%{transform:translateY(-10px) scale(1.2);opacity:.3}100%{transform:none;opacity:1}}
+        @keyframes fzPopBlink{50%{opacity:.25}}
+        @keyframes fzPopBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+        @keyframes fzPopBtn{0%,100%{box-shadow:0 8px 20px rgba(0,0,0,.25)}50%{box-shadow:0 8px 30px rgba(255,255,255,.7)}}
+        @keyframes fzPopBtnShine{0%,60%{left:-60%}100%{left:130%}}
+        @keyframes fzPopDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,50px) scale(1.25)}}
+        @keyframes fzPopSpark{0%{opacity:0;transform:translateY(0) scale(.5)}15%{opacity:1}100%{opacity:0;transform:translateY(-230px) scale(1.2)}}
+        @keyframes fzPopShake{0%,90%,100%{transform:none}92%{transform:translateX(-5px) rotate(-.7deg)}94%{transform:translateX(5px) rotate(.7deg)}96%{transform:translateX(-3px)}98%{transform:translateX(3px)}}
+        @media (max-width:700px){#fz-pop{top:calc(env(safe-area-inset-top,0px) + 68px);right:12px;left:12px;width:auto}.fz-pop-card{animation:fzPopInM .9s cubic-bezier(.2,1.25,.3,1) both,fzPopGrad 6s ease-in-out infinite,fzPopGlow 2.4s ease-in-out .9s infinite}.fz-pop-card.urgent{animation:fzPopInM .9s cubic-bezier(.2,1.25,.3,1) both,fzPopGrad 2.5s ease-in-out infinite,fzPopGlowHot 1s ease-in-out .9s infinite,fzPopShake 4s ease-in-out 1s infinite}}
         @media (prefers-reduced-motion:reduce){.fz-pop-card,.fz-pop-card *,.fz-pop-card::before{animation-duration:.01s !important;animation-iteration-count:1 !important}}
         /* ===== Personal Assistant ===== */
         #pa .pa-hero{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.2rem 1.4rem;margin-bottom:1rem;border-radius:20px;border:1px solid rgba(76,141,255,.3);
@@ -2740,17 +2783,53 @@
             return l.from_date === l.to_date ? leaveDateFmt(l.from_date) : leaveDateFmt(l.from_date) + ' – ' + leaveDateFmt(l.to_date);
         }
 
+        // Decided (approved/rejected) items auto-disappear after 24 hours; "Clear" hides everything seen so far.
+        const NOTIF_KEEP_MS = 24 * 60 * 60 * 1000;
+        function notifClearedAt() { try { return Number(localStorage.getItem('fzNotifClearedAt')) || 0; } catch (e) { return 0; } }
+        function notifClearAll() {
+            try { localStorage.setItem('fzNotifClearedAt', String(Date.now())); } catch (e) {}
+            renderNotifications();
+        }
+        function notifIsFresh(r) {
+            const t = new Date(r.decided_at || r.updated_at || r.created_at || 0).getTime();
+            return t && (Date.now() - t) < NOTIF_KEEP_MS && t > notifClearedAt();
+        }
+        let fzLastAlerts = [];   // filled by refreshAlerts() (bills, meetings, maintenance)
+
         function renderNotifications() {
             const pending = leaveRequests.filter(l => l.status === 'Pending');
-            const decided = leaveRequests.filter(l => l.status !== 'Pending').slice(0, 3);
+            const decided = leaveRequests.filter(l => l.status !== 'Pending' && notifIsFresh(l)).slice(0, 3);
             const wfhPending = (wfhRequests || []).filter(w => w.status === 'Pending');
-            const wfhDecided = (wfhRequests || []).filter(w => w.status !== 'Pending').slice(0, 2);
+            const wfhDecided = (wfhRequests || []).filter(w => w.status !== 'Pending' && notifIsFresh(w)).slice(0, 2);
+            let sAlerts = []; try { sAlerts = Array.isArray(smartAlerts) ? smartAlerts : []; } catch (e) { sAlerts = []; }
+            const alertCount = fzLastAlerts.length + sAlerts.length;
+            const total = pending.length + wfhPending.length + alertCount;
             const dot = document.querySelector('#notifBtn .ping-dot');
-            if (dot) dot.style.display = (pending.length || wfhPending.length) ? '' : 'none';
+            if (dot) dot.style.display = total ? '' : 'none';
             const cnt = document.getElementById('notifCount');
-            if (cnt) cnt.textContent = (pending.length + wfhPending.length) ? (pending.length + wfhPending.length) + ' pending' : '';
+            if (cnt) cnt.innerHTML = (total ? total + ' new' : '') + ((decided.length || wfhDecided.length) ? ` <a href="#" onclick="notifClearAll();return false;" style="margin-left:.5rem;font-size:.72rem;color:var(--primary);">Clear</a>` : '');
 
-            if (!pending.length && !decided.length && !wfhPending.length && !wfhDecided.length) {
+            const toneCol = t => t === 'red' ? 'var(--danger)' : t === 'amber' ? 'var(--warning)' : 'var(--primary)';
+            const toneBg = t => t === 'red' ? 'rgba(238,93,80,0.14)' : t === 'amber' ? 'rgba(255,177,0,0.14)' : 'rgba(30,107,255,0.14)';
+            const alertHtml = fzLastAlerts.map(a => `
+                <div class="notif-item" style="cursor:default;">
+                    <div class="n-icon" style="background:${toneBg(a.tone)}; color:${toneCol(a.tone)};"><i class="fa-solid ${a.icon || 'fa-bell'}"></i></div>
+                    <div class="n-text" style="flex:1;">
+                        <p>${escapeHtml(a.title)}</p>
+                        <span>${escapeHtml(a.sub || '')}</span>
+                        ${a.btn && a.act ? `<div class="notif-actions"><button class="mini-btn ok" onclick="${a.act}">${escapeHtml(a.btn)}</button></div>` : ''}
+                    </div>
+                </div>`).join('');
+            const smartHtml = sAlerts.slice(0, 6).map(a => {
+                const col = a.severity === 'critical' ? 'var(--danger)' : a.severity === 'warning' ? 'var(--warning)' : 'var(--primary)';
+                const bg = a.severity === 'critical' ? 'rgba(238,93,80,0.14)' : a.severity === 'warning' ? 'rgba(255,177,0,0.14)' : 'rgba(30,107,255,0.14)';
+                return `<div class="notif-item" style="cursor:default;">
+                    <div class="n-icon" style="background:${bg}; color:${col};"><i class="fa-solid ${a.icon || 'fa-triangle-exclamation'}"></i></div>
+                    <div class="n-text"><p>${a.title}</p><span>${a.detail}</span></div>
+                </div>`;
+            }).join('');
+
+            if (!pending.length && !decided.length && !wfhPending.length && !wfhDecided.length && !alertCount) {
                 notifList.innerHTML = `<div class="empty-row" style="padding:1.4rem;">No notifications yet</div>`;
                 return;
             }
@@ -2792,7 +2871,7 @@
                     <div class="n-text"><p>WFH ${w.status}: ${escapeHtml(w.employee_name || w.employee_email)}</p><span>${escapeHtml(leaveDateFmt(w.work_date))}</span></div>
                 </div>`;
             }).join('');
-            notifList.innerHTML = pendingHtml + wfhPendingHtml + decidedHtml + wfhDecidedHtml;
+            notifList.innerHTML = alertHtml + smartHtml + pendingHtml + wfhPendingHtml + decidedHtml + wfhDecidedHtml;
         }
         renderNotifications();
 
@@ -4333,17 +4412,19 @@
             const out = [];
             (moduleCache.recurring_bills || []).filter(b => b.active !== 'No' && b.next_due).forEach(b => {
                 const d = daysFrom(b.next_due);
-                if (d <= (b.remind_days ?? 3)) out.push({ d, tone: d < 0 ? 'red' : d <= 1 ? 'amber' : 'blue', title: `${b.title}: ${fmtMoney(b.amount)}`, sub: d < 0 ? `Overdue by ${-d} day(s), was due ${fmtDate(b.next_due)}` : d === 0 ? 'Due today' : `Due in ${d} day(s), ${fmtDate(b.next_due)}`, btn: 'Mark paid', act: `markBillPaid('${b.id}')` });
+                if (d <= (b.remind_days ?? 3)) out.push({ d, icon: 'fa-file-invoice-dollar', tone: d < 0 ? 'red' : d <= 1 ? 'amber' : 'blue', title: `${b.title}: ${fmtMoney(b.amount)}`, sub: d < 0 ? `Overdue by ${-d} day(s), was due ${fmtDate(b.next_due)}` : d === 0 ? 'Due today' : `Due in ${d} day(s), ${fmtDate(b.next_due)}`, btn: 'Mark paid', act: `markBillPaid('${b.id}')` });
             });
             (moduleCache.meetings || []).filter(m => m.status === 'Scheduled').forEach(m => {
                 const d = daysFrom(m.meeting_date);
-                if (d >= 0 && d <= 1) out.push({ d: d - 0.5, tone: d === 0 ? 'amber' : 'blue', title: `Meeting: ${m.title}`, sub: `${d === 0 ? 'Today' : 'Tomorrow'} ${m.meeting_time || ''}${m.with_whom ? ' with ' + m.with_whom : ''}`, btn: 'Done', act: `markMeetingDone('${m.id}')` });
+                if (d >= 0 && d <= 1) out.push({ d: d - 0.5, icon: 'fa-calendar-check', tone: d === 0 ? 'amber' : 'blue', title: `Meeting: ${m.title}`, sub: `${d === 0 ? 'Today' : 'Tomorrow'} ${m.meeting_time || ''}${m.with_whom ? ' with ' + m.with_whom : ''}`, btn: 'Done', act: `markMeetingDone('${m.id}')` });
             });
             mntAlerts(out);
             return out.sort((a, b) => a.d - b.d);
         }
         function refreshAlerts() {
             const a = getAlerts();
+            fzLastAlerts = a;
+            if (typeof renderNotifications === 'function') renderNotifications();
             const html = a.length ? a.map(x => `<div class="fz-alert ${x.tone}"><div><b>${escapeHtml(x.title)}</b><small>${escapeHtml(x.sub)}</small></div><button onclick="${x.act}">${x.btn}</button></div>`).join('') : '<span style="color:var(--text-muted);">All clear. Nothing due.</span>';
             document.querySelectorAll('.fz-alertfeed').forEach(el => el.innerHTML = html);
             const b = document.getElementById('navBadgeAlerts'); if (b) { b.textContent = a.length; b.style.display = a.length ? '' : 'none'; }
@@ -4822,7 +4903,7 @@
             const btns = it.kind === 'mnt' ? '<button class="go" data-act="mntpay">Mark paid</button><button data-act="snooze">Remind later</button>' : it.kind === 'bill'
                 ? '<button class="go" data-act="pay">Mark paid</button><button data-act="snooze">Remind later</button>'
                 : '<button class="go" data-act="done">Done</button><button data-act="snooze">Snooze 10 min</button>';
-            return `<div class="fz-pop-card ${it.tone}" data-key="${escapeHtml(it.key)}"><div class="fz-pop-ico"><i class="fa-solid ${it.icon}"></i></div><div class="fz-pop-body"><div class="fz-pop-tag">${escapeHtml(it.tag)}</div><b class="fz-pop-t">${escapeHtml(it.title)}</b><div class="fz-pop-s">${escapeHtml(it.sub)}</div>${it.ts ? `<span class="fz-pop-cd" data-ts="${it.ts}"></span>` : ''}<div class="fz-pop-btns">${btns}<button data-act="open">View all</button></div></div><button class="fz-pop-x" data-act="close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button><i class="fz-pop-line"></i></div>`;
+            return `<div class="fz-pop-card ${it.tone}" data-key="${escapeHtml(it.key)}"><i class="fz-pop-aura"></i><i class="fz-pop-aura b"></i><i class="fz-pop-sp s1"></i><i class="fz-pop-sp s2"></i><i class="fz-pop-sp s3"></i><i class="fz-pop-sp s4"></i><i class="fz-pop-sp s5"></i><div class="fz-pop-ico"><i class="fa-solid ${it.icon}"></i></div><div class="fz-pop-body"><div class="fz-pop-tag">${escapeHtml(it.tag)}</div><b class="fz-pop-t">${escapeHtml(it.title)}</b><div class="fz-pop-s">${escapeHtml(it.sub)}</div>${it.ts ? `<span class="fz-pop-cd" data-ts="${it.ts}"></span>` : ''}<div class="fz-pop-btns">${btns}<button data-act="open">View all</button></div></div><button class="fz-pop-x" data-act="close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button><i class="fz-pop-line"></i></div>`;
         }
         function fzPopRemove(el) { if (!el || el.classList.contains('out')) return; el.classList.add('out'); setTimeout(() => el.remove(), 420); }
         function fzPopCheck() {
@@ -4844,9 +4925,19 @@
         function fzPopTick() {
             document.querySelectorAll('.fz-pop-cd').forEach(el => {
                 const s = Math.round((Number(el.dataset.ts) - Date.now()) / 1000);
-                if (s <= 0) { el.textContent = s > -60 ? 'Starting now' : 'Started ' + Math.round(-s / 60) + ' min ago'; return; }
-                const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
-                el.textContent = 'in ' + (h ? h + 'h ' : '') + (m || h ? m + 'm ' : '') + pad2(x) + 's';
+                const card = el.closest('.fz-pop-card');
+                if (card) card.classList.toggle('urgent', s <= 300);
+                if (s <= 0) {
+                    const t = s > -60 ? 'Starting now' : 'Started ' + Math.round(-s / 60) + ' min ago';
+                    if (el.dataset.now !== t) { el.dataset.now = t; el.innerHTML = '<span class="fz-cd-now">' + t + '</span>'; }
+                } else {
+                    const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+                    const tile = (v, l, flip) => '<span class="fz-cd-t"><b' + (flip ? ' class="flip"' : '') + '>' + pad2(v) + '</b><small>' + l + '</small></span>';
+                    const sep = '<span class="fz-cd-sep">:</span>';
+                    const mChanged = el.dataset.m !== String(m + ':' + h); el.dataset.m = String(m + ':' + h); delete el.dataset.now;
+                    el.innerHTML = (h ? tile(h, 'hr', false) + sep : '') + tile(m, 'min', mChanged && el.dataset.init === '1') + sep + tile(x, 'sec', true);
+                    el.dataset.init = '1';
+                }
             });
         }
         document.addEventListener('click', async e => {
@@ -5498,6 +5589,7 @@
             const order = { critical: 0, warning: 1, info: 2 };
             smartAlerts.sort((a, b) => order[a.severity] - order[b.severity]);
             renderSmartAlerts();
+            if (typeof renderNotifications === 'function') renderNotifications();
             if (manual) showToast(smartAlerts.length ? `${smartAlerts.length} issue(s) found` : 'All clear — no issues detected', smartAlerts.length ? 'info' : 'success');
         }
 
